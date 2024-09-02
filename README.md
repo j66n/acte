@@ -30,13 +30,13 @@ This is why Agents also need GUI-like tools. I prefer calling it Agentic User In
 
 ### **Installation**
 
-```
+```shell
 pip install acte
 ```
 
 ### Example1: Hello World
 
-```
+```python
 from acte import Component, v
 from acte.chatbot import OpenaiChatbot
 from acte.server import Server
@@ -50,7 +50,7 @@ class HelloWorld(Component):
 
 server = Server(
     session_manager=SessionManager(HelloWorld, debug=True),
-    chatbot=OpenaiChatbot(                # default model is gpt-4o
+    chatbot=OpenaiChatbot(  # default model is gpt-4o
         api_key="YOUR OPENAI API KEY",
     )
 )
@@ -74,7 +74,7 @@ Note: You can also interact with **Screen** to debug your app.
 
 ### Example2: Counter
 
-```
+```python
 from acte import Component, v
 from acte.chatbot import OpenaiChatbot
 from acte.server import Server
@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
 ### Example3: Restaurant Assistant
 
-```
+```python
 from typing import Callable, Awaitable
 
 from acte.chatbot import OpenaiChatbot
@@ -271,14 +271,13 @@ POST /execute
 
 json:
 {
-    "session_id": str,
+    "session_id": "str",
     "actions": [
         {
-            "target_id": str,
-            "action_type": str,
-            "value": str | None,
+            "target_id": "str",
+            "action_type": "str",
+            "value": "str | None",
         },
-        ...
     ]
 }
 ```
@@ -327,7 +326,7 @@ POST /display
 
 json: 
 {
-    "session_id": str,
+    "session_id": "str",
 }
 ```
 

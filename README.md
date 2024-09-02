@@ -20,9 +20,8 @@ problems.
 
 Then a technique that surprised Steve Jobs comes up: Graphical User Interface (GUI).
 
-Since then, most of us no longer directly interact with command lines (a kind of API). We interact with API through
-middle layer GUI. GUI generally solved these two problems by constraining interaction to reduce cognitive load and
-degrees of freedom.
+Since then, most of us no longer directly interact with command lines (a kind of API). We interact with API through GUI.
+GUI generally solved these two problems by constraining interaction to reduce cognitive load and degrees of freedom.
 
 This is why Agents also need GUI-like tools. I prefer calling it Agentic User Interface (AUI).
 

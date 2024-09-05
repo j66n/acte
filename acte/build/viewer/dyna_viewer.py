@@ -31,7 +31,7 @@ class DynaViewer(Base):
             new_cache_dict = cls._pop_new_cache_dict()
 
             # start: add permanent cache to new_cache_dict
-            for identifier, cache in node.cached_dict:
+            for identifier, cache in node.cached_dict.items():
                 if cache.permanent and (identifier not in new_cache_dict):
                     new_cache_dict[identifier] = cache
             # end: add permanent cache to new_cache_dict

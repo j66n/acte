@@ -24,11 +24,6 @@ class OpenaiChatbot(Chatbot):
         self._max_tokens = max_tokens
         self._base_url = base_url
 
-        self.client: AsyncOpenAI = AsyncOpenAI(
-            api_key=self._api_key,
-            base_url=self._base_url,
-        )
-
     async def completion(self, messages: list[dict[str, Any]]) -> AsyncGenerator[str, None]:
         # Openai doesn't support user tool call and response, so we need to escape them
         messages = [

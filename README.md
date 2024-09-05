@@ -61,11 +61,11 @@ if __name__ == '__main__':
 1. Copy the code to a Python file, and set **OpenAI Api Key**.
 
 2. Run the code, and visit the playground: http://127.0.0.1:8000.
-   ![Example_00_00_hello_world.png](https://github.com/j66n/acte/blob/master/images/Example_00_00_hello_world.png)
+   ![Example_00_00_hello_world.png](https://github.com/j66n/acte/raw/master/images/Example_00_00_hello_world.png)
 
 3. Input "Hi, please new a session, and tell what you see."
    Then, the Agent will interact with **Screen**, and give you a response.
-   ![Example_00_01_hello_world.png](https://github.com/j66n/acte/blob/master/images/Example_00_01_hello_world.png)
+   ![Example_00_01_hello_world.png](https://github.com/j66n/acte/raw/master/images/Example_00_01_hello_world.png)
 
 Note: You can also interact with **Screen** to debug your app.
 
@@ -111,11 +111,11 @@ if __name__ == '__main__':
 
 1. Agent can **press** the button in **Screen**. The number on the right-top of the button is **Interactive ID**.
    Agent interacts with **Screen** by pointing to ID.
-   ![Example_01_00_counter.png](https://github.com/j66n/acte/blob/master/images/Example_01_00_counter.png)
+   ![Example_01_00_counter.png](https://github.com/j66n/acte/raw/master/images/Example_01_00_counter.png)
 
 2. Interaction's result will show in **Screen**. You can click "View"s in **Dialog** to check the **Screen** status in
    each step.
-   ![Example_01_01_counter.png](https://github.com/j66n/acte/blob/master/images/Example_01_01_counter.png)
+   ![Example_01_01_counter.png](https://github.com/j66n/acte/raw/master/images/Example_01_01_counter.png)
 
 ---
 
@@ -215,13 +215,13 @@ if __name__ == '__main__':
 ```
 
 1. Agent can **fill** input fields in **Screen**.
-   ![Example_02_00_restaurant_assistant.png](https://github.com/j66n/acte/blob/master/images/Example_02_00_restaurant_assistant.png)
+   ![Example_02_00_restaurant_assistant.png](https://github.com/j66n/acte/raw/master/images/Example_02_00_restaurant_assistant.png)
 
 2. Input fields also have their own **Interactive ID**. Agent can take multiple actions in one calling.
-   ![Example_02_01_restaurant_assistant.png](https://github.com/j66n/acte/blob/master/images/Example_02_01_restaurant_assistant.png)
+   ![Example_02_01_restaurant_assistant.png](https://github.com/j66n/acte/raw/master/images/Example_02_01_restaurant_assistant.png)
 
 3. You can define the backend logic after Agent press the button, such as make a request.
-   ![Example_02_02_restaurant_assistant.png](https://github.com/j66n/acte/blob/master/images/Example_02_02_restaurant_assistant.png)
+   ![Example_02_02_restaurant_assistant.png](https://github.com/j66n/acte/raw/master/images/Example_02_02_restaurant_assistant.png)
 
 ## Tool API
 

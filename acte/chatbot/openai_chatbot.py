@@ -1,7 +1,6 @@
 import json
 
 import aiohttp
-from openai import AsyncOpenAI
 from typing import Any, AsyncGenerator
 
 from acte.chatbot.chatbot import Chatbot

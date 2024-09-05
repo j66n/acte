@@ -4,7 +4,7 @@ from acte.build import Component, Builder
 from acte.executor import Executor, ActionType
 from acte.node import Root, Node
 from acte.render import Renderer
-from acte.context.context import Context
+from acte.context.context import Context, ContextObj
 
 T = TypeVar('T')
 
@@ -22,7 +22,7 @@ class Session:
         self._executor = executor
         self._renderer = renderer
 
-        self._context = Context()
+        self._context = ContextObj()
         self._root: Root | None = None
 
     async def start(self) -> None:

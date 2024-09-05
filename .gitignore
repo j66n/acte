@@ -1,3 +1,4 @@
 .pdm-build
 venv
 dist
+main.py

@@ -21,7 +21,7 @@ classifiers = [
 ]
 keywords = ["ai", "agent", "tool", "framework", "llm", "function calling"]
 dependencies = [
-    "openai>=1.43.0",
+    "aiohttp==3.10.5",
     "starlette>=0.38.2",
     "uvicorn>=0.30.6",
 ]

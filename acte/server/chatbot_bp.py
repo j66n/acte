@@ -46,17 +46,17 @@ class ChatbotBp:
         except KeyError:
             return JSONResponse({"err_info": {"validation_error": "messages key not found"}}, 400)
 
+        generator = self._chatbot.completion(messages)
+
         try:
-            first_result = await anext(self._chatbot.completion(messages))
+            first_result = await anext(generator)
         except Exception as e:
             return JSONResponse({"error_info": {"validation_error": str(e)}}, 400)
 
         async def generate():
-            yield f"data: {first_result}\n\n"
+            yield first_result
 
-            async for choice in self._chatbot.completion(messages):
-                yield f"data: {choice}\n\n"
-
-            yield f"data: [DONE]"
+            async for choice in generator:
+                yield choice
 
         return StreamingResponse(generate(), media_type="text/event-stream")

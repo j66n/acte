@@ -1,5 +1,6 @@
 import json
 
+import aiohttp
 from openai import AsyncOpenAI
 from typing import Any, AsyncGenerator
 
@@ -37,16 +38,31 @@ class OpenaiChatbot(Chatbot):
                 *self._escape_user_tool_calls_and_responses(messages),
             ]
 
-        async for chunk in await self.client.chat.completions.create(
-                model=self._model,
-                temperature=self._temperature,
-                max_tokens=self._max_tokens,
-                messages=messages,
-                tools=tools,
-                stream=True
-        ):
-            choices = chunk.model_dump_json()
-            yield choices
+        url = f"{self._base_url}/chat/completions"
+
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self._api_key}"
+        }
+
+        payload = {
+            "model": self._model,
+            "temperature": self._temperature,
+            "max_tokens": self._max_tokens,
+            "messages": messages,
+            "tools": tools,
+            "stream": True,
+        }
+
+        # use aiohttp
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=payload, headers=headers) as response:
+                if response.content_type == "text/event-stream":
+                    async for line in response.content:
+                        yield line
+                else:
+                    response = await response.text()
+                    raise Exception(response)
 
     @staticmethod
     def _escape_user_tool_calls_and_responses(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:

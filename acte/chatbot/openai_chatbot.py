@@ -32,11 +32,16 @@ class OpenaiChatbot(Chatbot):
 
     async def completion(self, messages: list[dict[str, Any]]) -> AsyncGenerator[str, None]:
         # Openai doesn't support user tool call and response, so we need to escape them
+        messages = [
+            {'role': 'system', 'content': self._system_message},
+            *self._escape_user_tool_calls_and_responses(messages),
+        ]
+
         if self._system_message != '':
-            messages = [
+            messages.insert(
+                0,
                 {'role': 'system', 'content': self._system_message},
-                *self._escape_user_tool_calls_and_responses(messages),
-            ]
+            )
 
         url = f"{self._base_url}/chat/completions"
 

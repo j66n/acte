@@ -7,7 +7,7 @@ name = "acte"
 version = "0.0.3"
 description = "A framework to build Tools for AI Agents, a GUI-like solution to enhance Function Calling."
 readme = "README.md"
-authors = [{ name = "Jonathan", email = "jonathan.nuance@gmail.com" }]
+authors = [{ name = "j66n", email = "jonathan.nuance@gmail.com" }]
 license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -35,4 +35,4 @@ package-dir = "."
 
 [tool.pdm.build]
 includes = ["acte"]
-package-data = {"acte" = ["*.html", "*.js", "*.css"]}
+package-data = { "acte" = ["*.html", "*.js", "*.css"] }

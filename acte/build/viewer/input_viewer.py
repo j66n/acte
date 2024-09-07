@@ -9,7 +9,7 @@ from acte.state import Signal, Compute
 
 class InputViewer(Base):
     @classmethod
-    def input_text(
+    def input_str(
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[str] | None = None,
@@ -29,7 +29,7 @@ class InputViewer(Base):
 
         cls._append_awaitable(
             cls._input_constructor(
-                InputType.TEXT,
+                InputType.STR,
                 name,
                 value,
                 on_fill,

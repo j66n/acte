@@ -82,7 +82,7 @@ class HtmlRenderer(Renderer):
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Input):
-            if inline.type == InputType.TEXT:
+            if inline.type == InputType.STR:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,

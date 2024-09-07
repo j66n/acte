@@ -7,7 +7,7 @@ from acte.state import Ref, Effect, Signal
 
 
 class InputType(Enum):
-    TEXT = "text"
+    STR = "str"
     INT = "int"
     FLOAT = "float"
 

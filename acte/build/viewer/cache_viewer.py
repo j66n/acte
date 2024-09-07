@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import contextlib
-from typing import Any, Iterator
+from typing import Any, Iterator, cast, Container
 
 from acte.build.viewer.common.exception import SkipException
 from acte.build.viewer.common.base import Base
@@ -41,7 +41,7 @@ class CacheViewer(Base):
         cls._append_container(cache)
 
     @classmethod
-    async def _enter_cached_constructor(cls, cached: Cache | None) -> None:
+    async def _enter_cached_constructor(cls, cached: Cache) -> None:
         cls._append_container(cached)
 
     @classmethod

@@ -109,7 +109,7 @@ class InputViewer(Base):
         name = to_ref(name)
         on_fill = to_ref(on_fill)
 
-        node = Input[input_type](input_type)
+        node = Input(input_type)
         node.set_interactive_id(cls._generate_interactive_id())
 
         await node.bind_name(name)

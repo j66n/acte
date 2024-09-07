@@ -11,19 +11,23 @@ class Button(Inline, Interactive):
         Interactive.__init__(self)
 
         self._content: str = ''
-        self._on_press: Callable[[], Awaitable[None] | None] = lambda: None
+        self._on_press: Callable[[], Awaitable[None] | None] | None = None
 
     @property
     def content(self) -> str:
         return self._content
 
     @property
-    def on_press(self) -> Callable[[], Awaitable[None] | None]:
+    def on_press(self) -> Callable[[], Awaitable[None] | None] | None:
         return self._on_press
 
     async def bind_content(self, content: Ref[str]) -> None:
         async def _func() -> None:
-            self._content = content.value
+            v = content.value
+            if v is None:
+                v = ''
+
+            self._content = v
 
         effect = await Effect.create(_func)
 

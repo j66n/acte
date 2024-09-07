@@ -52,7 +52,8 @@ class Executor:
     @classmethod
     async def _button_execute(cls, button: Button, action_type: ActionType) -> None:
         if action_type == ActionType.PRESS:
-            await call_mix(button.on_press)
+            if button.on_press is not None:
+                await call_mix(button.on_press)
         else:
             raise ValueError(f"Button doesn't support action type: {action_type.value}")
 
@@ -68,7 +69,8 @@ class Executor:
             except ValueError:
                 raise ValueError(f"Input value is not a {node.type}: {value}")
 
-            await call_mix(node.on_fill, value)
+            if node.on_fill is not None:
+                await call_mix(node.on_fill, value)
 
         else:
             raise ValueError(f"Input doesn't support action type: {action_type.value}")

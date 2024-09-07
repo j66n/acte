@@ -36,7 +36,7 @@ class Memo(Ref[T]):
         return self._effect
 
     @property
-    def value(self) -> T:
+    def value(self) -> T | None:
         signal = cast(Signal[T], self._signal)
 
         return signal.value

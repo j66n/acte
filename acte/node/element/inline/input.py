@@ -18,7 +18,7 @@ class Input(Generic[T], Inline, Interactive):
 
         self._name: str = ''
         self._value: T | None = None
-        self._on_fill: Callable[[str], Awaitable[None] | None] = lambda a: None
+        self._on_fill: Callable[[str], Awaitable[None] | None] | None = None
 
     @property
     def type(self) -> InputType:
@@ -33,12 +33,16 @@ class Input(Generic[T], Inline, Interactive):
         return self._value
 
     @property
-    def on_fill(self) -> Callable[[str], Awaitable[None] | None]:
+    def on_fill(self) -> Callable[[str], Awaitable[None] | None] | None:
         return self._on_fill
 
     async def bind_name(self, name: Ref[str]) -> None:
         async def _func() -> None:
-            self._name = name.value
+            v = name.value
+            if v is None:
+                v = ""
+
+            self._name = v
 
         effect = await Effect.create(_func)
 

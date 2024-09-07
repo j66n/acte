@@ -1,10 +1,11 @@
 import os
+import typing
 from json import JSONDecodeError
 
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse, StreamingResponse
-from starlette.routing import Route, Mount
+from starlette.routing import Route, Mount, BaseRoute
 from starlette.staticfiles import StaticFiles
 
 from acte.chatbot import Chatbot
@@ -24,7 +25,7 @@ class ChatbotBp:
         self._load_static = load_static
 
     def as_app(self) -> Starlette:
-        routes = [Route('/completions', self._completions_route, methods=['POST'])]
+        routes: list[BaseRoute] = [Route('/completions', self._completions_route, methods=['POST'])]
 
         if self._load_static:
             this_file_dir = os.path.dirname(os.path.abspath(__file__))

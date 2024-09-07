@@ -6,7 +6,7 @@ class Text(Inline):
     def __init__(self) -> None:
         super().__init__()
 
-        self._content = ""
+        self._content: str = ""
 
     @property
     def content(self) -> str:
@@ -14,7 +14,11 @@ class Text(Inline):
 
     async def bind_content(self, content: Ref[str]) -> None:
         async def _func() -> None:
-            self._content = content.value
+            v = content.value
+            if v is None:
+                v = ""
+
+            self._content = v
 
         effect = await Effect.create(_func)
 

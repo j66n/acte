@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as Et
+from typing import cast
 
 from acte.node import Node, Block, Virtual, Inline, Div, Text, ComponentNode, Root, Button, Dyna, Cache, Input, \
     InputType
@@ -83,12 +84,14 @@ class HtmlRenderer(Renderer):
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Input):
             if inline.type is str:
+                v = cast(str, inline.value)
+
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
                     type=inline.type.value,
                     name=inline.name,
-                    value=inline.value
+                    value=v
                 )
             elif inline.type is int:
                 el = Et.Element(

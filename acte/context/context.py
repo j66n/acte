@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Context:
-    _context_obj: ContextVar[ContextObj] = ContextVar("context_obj", default=None)
+    _context_obj: ContextVar[ContextObj | None] = ContextVar("context_obj", default=None)
 
     @classmethod
     def use(cls, c: ContextObj) -> None:
@@ -20,63 +20,81 @@ class Context:
 
     @classmethod
     def get_awaitable_list_stack(cls) -> list[list[Awaitable[None]]]:
-        if cls._context_obj.get() is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().awaitable_list_stack
+        if isinstance(context, ContextObj):
+            return context.awaitable_list_stack
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_pending_effect_list(cls) -> list[Effect]:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().pending_effect_list
+        if isinstance(context, ContextObj):
+            return context.pending_effect_list
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_container_stack(cls) -> list[Container]:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().container_stack
+        if isinstance(context, ContextObj):
+            return context.container_stack
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_interactive_count(cls) -> int:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().interactive_count
+        if isinstance(context, ContextObj):
+            return context.interactive_count
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def set_interactive_count(cls, count: int) -> None:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        cls._context_obj.get().set_interactive_count(count)
+        if isinstance(context, ContextObj):
+            context.set_interactive_count(count)
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_effect_stack(cls) -> list[Effect]:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().effect_stack
+        if isinstance(context, ContextObj):
+            return context.effect_stack
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_is_skip(cls) -> bool:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().is_skip
+        if isinstance(context, ContextObj):
+            return context.is_skip
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def set_is_skip(cls, is_skip: bool) -> None:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        cls._context_obj.get().set_is_skip(is_skip)
+        if isinstance(context, ContextObj):
+            context.set_is_skip(is_skip)
+        else:
+            raise ValueError("context_obj is None")
 
     @classmethod
     def get_cache_dict_stack(cls) -> list[dict[Any, Cache]]:
-        if cls._context_obj is None:
-            raise ValueError("context_obj is None")
+        context = cls._context_obj.get()
 
-        return cls._context_obj.get().cache_dict_stack
+        if isinstance(context, ContextObj):
+            return context.cache_dict_stack
+        else:
+            raise ValueError("context_obj is None")

@@ -24,7 +24,7 @@ class OpenaiChatbot(Chatbot):
         self._max_tokens = max_tokens
         self._base_url = base_url
 
-    async def completion(self, messages: list[dict[str, Any]]) -> AsyncGenerator[str, None]:
+    async def completion(self, messages: list[dict[str, Any]]) -> AsyncGenerator[bytes, None]:
         # Openai doesn't support user tool call and response, so we need to escape them
         messages = [
             {'role': 'system', 'content': self._system_message},
@@ -60,8 +60,8 @@ class OpenaiChatbot(Chatbot):
                     async for line in response.content:
                         yield line
                 else:
-                    response = await response.text()
-                    raise Exception(response)
+                    resp_str = await response.text()
+                    raise Exception(resp_str)
 
     @staticmethod
     def _escape_user_tool_calls_and_responses(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:

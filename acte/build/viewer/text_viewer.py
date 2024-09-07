@@ -1,5 +1,4 @@
 from collections.abc import Callable
-from typing import Any
 
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base

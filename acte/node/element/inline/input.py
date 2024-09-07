@@ -1,18 +1,15 @@
-from enum import Enum
-from typing import Callable, Awaitable, Any
+from typing import Callable, Awaitable, TypeVar, Generic, Type, TypeAlias
 
 from acte.node.element.inline.inline import Inline
 from acte.node.implement.interactive import Interactive
 from acte.state import Ref, Effect, Signal
 
+T = TypeVar('T', str, int, float)
 
-class InputType(Enum):
-    STR = "str"
-    INT = "int"
-    FLOAT = "float"
+InputType: TypeAlias = Type[T]
 
 
-class Input(Inline, Interactive):
+class Input(Generic[T], Inline, Interactive):
     def __init__(self, input_type: InputType) -> None:
         Inline.__init__(self)
         Interactive.__init__(self)
@@ -20,8 +17,8 @@ class Input(Inline, Interactive):
         self._type: InputType = input_type
 
         self._name: str = ''
-        self._value: str = ''
-        self._on_fill: Callable[[str, str], Awaitable[None] | None] = lambda a, b: None
+        self._value: T | None = None
+        self._on_fill: Callable[[str], Awaitable[None] | None] = lambda a: None
 
     @property
     def type(self) -> InputType:
@@ -32,11 +29,11 @@ class Input(Inline, Interactive):
         return self._name
 
     @property
-    def value(self) -> str:
+    def value(self) -> T | None:
         return self._value
 
     @property
-    def on_fill(self) -> Callable[[str, str], Awaitable[None] | None]:
+    def on_fill(self) -> Callable[[str], Awaitable[None] | None]:
         return self._on_fill
 
     async def bind_name(self, name: Ref[str]) -> None:
@@ -47,12 +44,9 @@ class Input(Inline, Interactive):
 
         self._effect_list.append(effect)
 
-    async def bind_value(self, value: Signal[Any]) -> None:
+    async def bind_value(self, value: Signal[T]) -> None:
         async def _func() -> None:
-            if value.value is None:
-                self._value = ''
-            else:
-                self._value = str(value.value)
+            self._value = value.value
 
         effect = await Effect.create(_func)
 

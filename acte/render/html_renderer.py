@@ -82,7 +82,7 @@ class HtmlRenderer(Renderer):
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Input):
-            if inline.type == InputType.STR:
+            if inline.type is str:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
@@ -90,22 +90,22 @@ class HtmlRenderer(Renderer):
                     name=inline.name,
                     value=inline.value
                 )
-            elif inline.type == InputType.INT:
+            elif inline.type is int:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
                     type="number",
                     name=inline.name,
-                    value=inline.value,
+                    value=str(inline.value),
                     step="1"
                 )
-            elif inline.type == InputType.FLOAT:
+            elif inline.type is float:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
                     type="number",
                     name=inline.name,
-                    value=inline.value,
+                    value=str(inline.value),
                     step="any"
                 )
             else:

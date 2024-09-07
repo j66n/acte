@@ -62,19 +62,13 @@ class Executor:
             if value is None:
                 raise ValueError("Input value is None")
 
+            try:
+                if value != '':
+                    node.type(value)
+            except ValueError:
+                raise ValueError(f"Input value is not a {node.type}: {value}")
+
             await call_mix(node.on_fill, value)
-            if node.type == InputType.INT:
-                try:
-                    if value != '':
-                        int(value)
-                except ValueError:
-                    raise ValueError(f"Input value is not a int: {value}")
-            elif node.type == InputType.FLOAT:
-                try:
-                    if value != '':
-                        float(value)
-                except ValueError:
-                    raise ValueError(f"Input value is not a float: {value}")
 
         else:
             raise ValueError(f"Input doesn't support action type: {action_type.value}")

@@ -17,6 +17,7 @@ class Input(Generic[T], Inline, Interactive):
         self._type: InputType = input_type
 
         self._name: str = ''
+        self._hint: str = ''
         self._value: T | None = None
         self._on_fill: Callable[[str], Awaitable[None] | None] | None = None
 
@@ -27,6 +28,10 @@ class Input(Generic[T], Inline, Interactive):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def hint(self) -> str:
+        return self._hint
 
     @property
     def value(self) -> T | None:
@@ -51,6 +56,18 @@ class Input(Generic[T], Inline, Interactive):
     async def bind_value(self, value: Signal[T]) -> None:
         async def _func() -> None:
             self._value = value.value
+
+        effect = await Effect.create(_func)
+
+        self._effect_list.append(effect)
+
+    async def bind_hint(self, hint: Ref[str]) -> None:
+        async def _func() -> None:
+            v = hint.value
+            if v is None:
+                v = ''
+
+            self._hint = v
 
         effect = await Effect.create(_func)
 

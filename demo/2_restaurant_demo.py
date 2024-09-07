@@ -57,7 +57,7 @@ class Menu(Component):
 
         v.text(self.total)
 
-        v.button("checkout", on_press=self._checkout)
+        v.button("checkout", on_press=self._checkout, hint="This is a test Hint")
 
     def total(self) -> str:
         total = 0

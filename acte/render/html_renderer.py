@@ -78,28 +78,37 @@ class HtmlRenderer(Renderer):
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Button):
-            el = Et.Element("button", id=inline.interactive_id)
+            el = Et.Element(
+                "button",
+                id=inline.interactive_id,
+            )
+
+            if inline.hint != '':
+                el.set("title", inline.hint)
+
             el.text = inline.content
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Input):
-            if inline.type is str:
-                v = cast(str, inline.value)
+            if inline.value is None:
+                v = ''
+            else:
+                v = str(inline.value)
 
+            if inline.type is str:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
-                    type=inline.type.value,
-                    name=inline.name,
+                    type="text",
                     value=v
                 )
+
             elif inline.type is int:
                 el = Et.Element(
                     "input",
                     id=inline.interactive_id,
                     type="number",
-                    name=inline.name,
-                    value=str(inline.value),
+                    value=v,
                     step="1"
                 )
             elif inline.type is float:
@@ -107,12 +116,17 @@ class HtmlRenderer(Renderer):
                     "input",
                     id=inline.interactive_id,
                     type="number",
-                    name=inline.name,
-                    value=str(inline.value),
+                    value=v,
                     step="any"
                 )
             else:
                 raise ValueError(f"Unknown input type: {inline.type}")
+
+            if inline.name != '':
+                el.set("name", inline.name)
+
+            if inline.hint != '':
+                el.set("title", inline.hint)
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         else:

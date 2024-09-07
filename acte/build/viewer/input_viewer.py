@@ -14,6 +14,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[str] | None = None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            hint: Callable[[], str] | Prop[str] = '',
     ) -> None:
         cls._check_skip()
 
@@ -22,6 +23,9 @@ class InputViewer(Base):
 
         if value is None:
             value = Signal[str](None)
+
+        if callable(hint):
+            hint = Compute(hint)
 
         if on_fill is None:
             async def on_fill(v: str) -> None:
@@ -33,6 +37,7 @@ class InputViewer(Base):
                 name,
                 value,
                 on_fill,
+                hint,
             )
         )
 
@@ -42,6 +47,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[int] | None = None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            hint: Callable[[], str] | Prop[str] = '',
     ) -> None:
         cls._check_skip()
 
@@ -50,6 +56,9 @@ class InputViewer(Base):
 
         if value is None:
             value = Signal[int](None)
+
+        if callable(hint):
+            hint = Compute(hint)
 
         if on_fill is None:
             async def on_fill(v: str) -> None:
@@ -64,6 +73,7 @@ class InputViewer(Base):
                 name,
                 value,
                 on_fill,
+                hint,
             )
         )
 
@@ -73,6 +83,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            hint: Callable[[], str] | Prop[str] = '',
     ) -> None:
         cls._check_skip()
 
@@ -81,6 +92,9 @@ class InputViewer(Base):
 
         if value is None:
             value = Signal[float](None)
+
+        if callable(hint):
+            hint = Compute(hint)
 
         if on_fill is None:
             async def on_fill(v: str) -> None:
@@ -95,6 +109,7 @@ class InputViewer(Base):
                 name,
                 value,
                 on_fill,
+                hint,
             )
         )
 
@@ -105,8 +120,10 @@ class InputViewer(Base):
             name: Prop[str],
             value: Signal[Any],
             on_fill: Prop[Callable[[str], Awaitable[None] | None]],
+            hint: Prop[str],
     ) -> None:
         name = to_ref(name)
+        hint = to_ref(hint)
         on_fill = to_ref(on_fill)
 
         node = Input(input_type)
@@ -114,6 +131,7 @@ class InputViewer(Base):
 
         await node.bind_name(name)
         await node.bind_value(value)
+        await node.bind_hint(hint)
         await node.bind_on_fill(on_fill)
 
         cls._attach_to_container(node)

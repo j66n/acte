@@ -139,17 +139,15 @@ class SessionManager(Validator):
         session = self._session_dict[cast(str, sid)]
 
         ret.screen, ret.display_error = await self._display(session)
-        if ret.display_error is not None:
-            if self._debug:
-                traceback.print_exc()
 
         return ret.to_dict()
 
-    @staticmethod
-    async def _display(session: Session) -> tuple[str | None, str | None]:
+    async def _display(self, session: Session) -> tuple[str | None, str | None]:
         try:
             await session.display()
             screen = session.render()
             return screen, None
         except Exception as e:
+            if self._debug:
+                traceback.print_exc()
             return None, str(e)

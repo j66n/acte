@@ -25,9 +25,9 @@ class MenuItem(Component):
     def view(self) -> None:
         with v.div():
             v.text(lambda: f"{self._name.value}: ${self._price.value}")
-            v.input_int("quantity", self._quantity, self._on_fill)
+            v.input_int("quantity", self._quantity, self._on_set)
 
-    async def _on_fill(self, value: str) -> None:
+    async def _on_set(self, value: str) -> None:
         await self._on_quantity_change(
             self._name.value,
             self._price.value,

@@ -51,15 +51,12 @@ class Validator:
         if 'action_type' not in action_data:
             err_info_dict['action_type'] = 'Missing field.'
         else:
-            if action_data['action_type'] not in ['press', 'fill']:
-                err_info_dict['action_type'] = 'Invalid value. Must be one of "press" and "fill". '
+            if action_data['action_type'] not in ['press', 'set']:
+                err_info_dict['action_type'] = 'Invalid value. Must be one of "press" and "set". '
 
-            if action_data['action_type'] == 'fill':
+            if action_data['action_type'] == 'set':
                 if 'value' not in action_data:
                     err_info_dict['value'] = 'Missing field.'
-                else:
-                    if not isinstance(action_data['value'], str):
-                        err_info_dict['value'] = 'Invalid value. Must be a string.'
             else:
                 if 'value' in action_data:
                     err_info_dict['value'] = 'Invalid field. Must not be present.'

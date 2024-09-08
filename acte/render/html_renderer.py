@@ -1,8 +1,7 @@
+import json
 import xml.etree.ElementTree as Et
-from typing import cast
 
-from acte.node import Node, Block, Virtual, Inline, Div, Text, ComponentNode, Root, Button, Dyna, Cache, Input, \
-    InputKind
+from acte.node import Node, Block, Virtual, Inline, Div, Text, ComponentNode, Root, Button, Dyna, Cache, Input
 from acte.node.implement import Container
 from acte.render.renderer import Renderer
 
@@ -83,8 +82,8 @@ class HtmlRenderer(Renderer):
                 id=inline.interactive_id,
             )
 
-            if inline.hint != '':
-                el.set("hint", inline.hint)
+            if inline.schema is not None:
+                el.set("schema", str(inline.schema.json_schema))
 
             el.text = inline.content
 
@@ -97,24 +96,11 @@ class HtmlRenderer(Renderer):
             if inline.name != '':
                 el.set("name", inline.name)
 
-            if inline.kind is str:
-                el.set("kind", "str")
-            elif inline.kind is int:
-                el.set("kind", "int")
-            elif inline.kind is float:
-                el.set("kind", "float")
-            elif inline.kind is bool:
-                el.set("kind", "bool")
-            else:
-                raise ValueError(f"Unknown input type: {inline.kind}")
+            if inline.schema is not None:
+                el.set("schema", str(inline.schema.json_schema))
 
-            el.set("value", inline.value)
-
-            if inline.hint != '':
-                el.set("hint", inline.hint)
-
-            if inline.enum is not None:
-                el.set("enum", str(inline.enum))
+            v = json.dumps(inline.value, ensure_ascii=False)
+            el.set("value", v)
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         else:

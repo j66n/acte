@@ -1,7 +1,9 @@
+import json
+
 from acte.build import call_on_display
 from acte.common.util import call_mix
 from acte.executor.action_type import ActionType
-from acte.node import Root, Node, Button, Input, ComponentNode, InputKind
+from acte.node import Root, Node, Button, Input, ComponentNode
 from acte.node.implement import Interactive, Container
 
 
@@ -59,23 +61,20 @@ class Executor:
 
     @classmethod
     async def _input_execute(cls, node: Input, action_type: ActionType, value: str | None) -> None:
-        if action_type == ActionType.FILL:
+        if action_type == ActionType.SET:
             if value is None:
                 raise ValueError("Input value is None")
 
             try:
-                if value == '':
-                    converted_value = None
+                if node.schema is None:
+                    resolved_value = value
                 else:
-                    converted_value = node.kind(value)
+                    resolved_value = node.schema.resolve(value)
             except ValueError:
-                raise ValueError(f"Input value is not a {node.kind}: {value}")
+                raise ValueError(f"Input value resolved failed.")
 
-            if (node.enum is not None) and (converted_value not in node.enum):
-                raise ValueError(f"Input value is not in enum: {node.enum}")
-
-            if node.on_fill is not None:
-                await call_mix(node.on_fill, value)
+            if node.on_set is not None:
+                await call_mix(node.on_set, resolved_value)
 
         else:
             raise ValueError(f"Input doesn't support action type: {action_type.value}")

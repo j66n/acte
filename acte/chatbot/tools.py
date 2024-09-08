@@ -30,12 +30,11 @@ tools = [
                                 },
                                 "action_type": {
                                     "type": "string",
-                                    "enum": ["press", "fill"],
+                                    "enum": ["press", "set"],
                                     "description": "press: press the button;"
-                                                   "fill: fill the input field, it you want to clear, just fill an empty string"
+                                                   "set: set the input field's value"
                                 },
                                 "value": {
-                                    "type": "string",
                                     "description": "When the action_type is 'input', the value is the input value.",
                                 }
                             },

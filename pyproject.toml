@@ -24,6 +24,7 @@ dependencies = [
     "aiohttp==3.10.5",
     "starlette==0.38.2",
     "uvicorn==0.30.6",
+    "jsonschema==4.23.0",
 ]
 requires-python = ">=3.10"
 

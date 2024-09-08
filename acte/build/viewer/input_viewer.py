@@ -3,10 +3,9 @@ from typing import Callable, Awaitable, cast, Any, TypeVar, Type
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
-from acte.node import Input, InputKind
+from acte.node import Input
+from acte.schema.schema import StrSchema, Schema, IntSchema, NumSchema, BoolSchema
 from acte.state import Signal, Compute, Ref
-
-T = TypeVar('T')
 
 
 class InputViewer(Base):
@@ -15,17 +14,26 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[str] | None = None,
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            hint: Callable[[], str] | Prop[str] = '',
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            title: Callable[[], str] | Prop[str] | None = None,
             enum: Prop[list[str]] | None = None,
     ) -> None:
+        if callable(title):
+            title = Compute(title)
+
+        if title is not None:
+            title = to_ref(title)
+
+        if enum is not None:
+            enum = to_ref(enum)
+
+        schema = StrSchema(title, enum)
+
         cls._input(
-            str,
             name,
+            schema,
             value,
-            on_fill,
-            hint,
-            enum,
+            on_set,
         )
 
     @classmethod
@@ -33,17 +41,26 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[int] | None = None,
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            hint: Callable[[], str] | Prop[str] = '',
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            title: Callable[[], str] | Prop[str] | None = None,
             enum: Prop[list[int]] | None = None,
     ) -> None:
+        if callable(title):
+            title = Compute(title)
+
+        if title is not None:
+            title = to_ref(title)
+
+        if enum is not None:
+            enum = to_ref(enum)
+
+        schema = IntSchema(title, enum)
+
         cls._input(
-            int,
             name,
+            schema,
             value,
-            on_fill,
-            hint,
-            enum,
+            on_set,
         )
 
     @classmethod
@@ -51,17 +68,26 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            hint: Callable[[], str] | Prop[str] = '',
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            title: Callable[[], str] | Prop[str] | None = None,
             enum: Prop[list[float]] | None = None,
     ) -> None:
+        if callable(title):
+            title = Compute(title)
+
+        if title is not None:
+            title = to_ref(title)
+
+        if enum is not None:
+            enum = to_ref(enum)
+
+        schema = NumSchema(title, enum)
+
         cls._input(
-            float,
             name,
+            schema,
             value,
-            on_fill,
-            hint,
-            enum,
+            on_set,
         )
 
     @classmethod
@@ -69,28 +95,35 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[bool] | None = None,
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            hint: Callable[[], str] | Prop[str] = '',
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            title: Callable[[], str] | Prop[str] | None = None,
             enum: Prop[list[bool]] | None = None,
     ) -> None:
+        if callable(title):
+            title = Compute(title)
+
+        if title is not None:
+            title = to_ref(title)
+
+        if enum is not None:
+            enum = to_ref(enum)
+
+        schema = BoolSchema(title, enum)
+
         cls._input(
-            bool,
             name,
+            schema,
             value,
-            on_fill,
-            hint,
-            enum,
+            on_set,
         )
 
     @classmethod
     def _input(
             cls,
-            input_kind: InputKind,
             name: Callable[[], str] | Prop[str],
-            value: Prop[T] | None,
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None,
-            hint: Callable[[], str] | Prop[str],
-            enum: Prop[list[T]] | None,
+            schema: Prop[Schema],
+            value: Prop[Any] | None,
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
     ) -> None:
         cls._check_skip()
 
@@ -100,58 +133,42 @@ class InputViewer(Base):
         if value is None:
             value = Signal(None)
 
-        if (on_fill is None) and isinstance(value, Signal):
+        if (on_set is None) and isinstance(value, Signal):
             value = cast(Signal, value)
 
-            async def on_fill(v: str) -> None:
-                if v == '':
-                    await value.set(None)
-                else:
-                    await value.set(input_kind(v))
-
-        if on_fill is None:
-            on_fill = Ref(None)
-
-        if callable(hint):
-            hint = Compute(hint)
-
-        if enum is None:
-            enum = Ref(None)
+            async def on_set(v: Any) -> None:
+                await value.set(v)
 
         cls._append_awaitable(
             cls._input_constructor(
-                input_kind,
                 name,
+                schema,
                 value,
-                on_fill,
-                hint,
-                enum,
+                on_set,
             )
         )
 
     @classmethod
     async def _input_constructor(
             cls,
-            kind: InputKind,
             name: Prop[str],
+            schema: Prop[Schema],
             value: Prop[Any],
-            on_fill: Prop[Callable[[str], Awaitable[None] | None]],
-            hint: Prop[str],
-            enum: Prop[list[Any]],
+            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
     ) -> None:
         name = to_ref(name)
+        schema = to_ref(schema)
         value = to_ref(value)
-        on_fill = to_ref(on_fill)
-        hint = to_ref(hint)
-        enum = to_ref(enum)
+        if on_set is not None:
+            on_set = to_ref(on_set)
 
-        node = Input(kind)
+        node = Input()
         node.set_interactive_id(cls._generate_interactive_id())
 
         await node.bind_name(name)
+        await node.bind_schema(schema)
         await node.bind_value(value)
-        await node.bind_on_fill(on_fill)
-        await node.bind_hint(hint)
-        await node.bind_enum(enum)
+        if on_set is not None:
+            await node.bind_on_set(on_set)
 
         cls._attach_to_container(node)

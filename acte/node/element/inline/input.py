@@ -4,7 +4,7 @@ from acte.node.element.inline.inline import Inline
 from acte.node.implement.interactive import Interactive
 from acte.state import Ref, Effect, Signal
 
-T = TypeVar('T', str, int, float)
+T = TypeVar('T', str, int, float, bool)
 
 InputType: TypeAlias = Type[T]
 

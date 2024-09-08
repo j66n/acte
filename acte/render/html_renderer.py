@@ -105,6 +105,8 @@ class HtmlRenderer(Renderer):
             elif inline.type is float:
                 el.set("type", "number")
                 el.set("step", "any")
+            elif inline.type is bool:
+                el.set("type", "boolean")
             else:
                 raise ValueError(f"Unknown input type: {inline.type}")
 

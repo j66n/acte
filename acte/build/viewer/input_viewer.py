@@ -65,6 +65,24 @@ class InputViewer(Base):
         )
 
     @classmethod
+    def input_bool(
+            cls,
+            name: Callable[[], str] | Prop[str] = '',
+            value: Signal[bool] | None = None,
+            on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            hint: Callable[[], str] | Prop[str] = '',
+            enum: Prop[list[bool]] | None = None,
+    ) -> None:
+        cls._input(
+            bool,
+            name,
+            value,
+            on_fill,
+            hint,
+            enum,
+        )
+
+    @classmethod
     def _input(
             cls,
             input_type: InputType,

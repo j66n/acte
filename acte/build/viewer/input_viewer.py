@@ -1,10 +1,10 @@
-from typing import Callable, Awaitable, cast, Any, Type
+from typing import Callable, Awaitable, cast, Any
 
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
 from acte.node import Input, InputType
-from acte.state import Signal, Compute
+from acte.state import Signal, Compute, Ref
 
 
 class InputViewer(Base):
@@ -12,7 +12,7 @@ class InputViewer(Base):
     def input_str(
             cls,
             name: Callable[[], str] | Prop[str] = '',
-            value: Signal[str] | None = None,
+            value: Prop[str] | None = None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
             hint: Callable[[], str] | Prop[str] = '',
     ) -> None:
@@ -27,9 +27,14 @@ class InputViewer(Base):
         if callable(hint):
             hint = Compute(hint)
 
-        if on_fill is None:
+        if (on_fill is None) and (not isinstance(value, Signal)):
+            value = cast(Signal, value)
+
             async def on_fill(v: str) -> None:
                 await value.set(v)
+
+        if on_fill is None:
+            on_fill = Ref(None)
 
         cls._append_awaitable(
             cls._input_constructor(
@@ -45,7 +50,7 @@ class InputViewer(Base):
     def input_int(
             cls,
             name: Callable[[], str] | Prop[str] = '',
-            value: Signal[int] | None = None,
+            value: Prop[int] | None = None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
             hint: Callable[[], str] | Prop[str] = '',
     ) -> None:
@@ -60,12 +65,17 @@ class InputViewer(Base):
         if callable(hint):
             hint = Compute(hint)
 
-        if on_fill is None:
+        if (on_fill is None) and (not isinstance(value, Signal)):
+            value = cast(Signal, value)
+
             async def on_fill(v: str) -> None:
                 if v == '':
                     await value.set(None)
                 else:
                     await value.set(int(v))
+
+        if on_fill is None:
+            on_fill = Ref(None)
 
         cls._append_awaitable(
             cls._input_constructor(
@@ -96,12 +106,17 @@ class InputViewer(Base):
         if callable(hint):
             hint = Compute(hint)
 
-        if on_fill is None:
+        if (on_fill is None) and (not isinstance(value, Signal)):
+            value = cast(Signal, value)
+
             async def on_fill(v: str) -> None:
                 if v == '':
                     await value.set(None)
                 else:
                     await value.set(float(v))
+
+        if on_fill is None:
+            on_fill = Ref(None)
 
         cls._append_awaitable(
             cls._input_constructor(
@@ -118,13 +133,14 @@ class InputViewer(Base):
             cls,
             input_type: InputType,
             name: Prop[str],
-            value: Signal[Any],
+            value: Prop[Any],
             on_fill: Prop[Callable[[str], Awaitable[None] | None]],
             hint: Prop[str],
     ) -> None:
         name = to_ref(name)
-        hint = to_ref(hint)
+        value = to_ref(value)
         on_fill = to_ref(on_fill)
+        hint = to_ref(hint)
 
         node = Input(input_type)
         node.set_interactive_id(cls._generate_interactive_id())

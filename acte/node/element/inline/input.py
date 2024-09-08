@@ -53,7 +53,7 @@ class Input(Generic[T], Inline, Interactive):
 
         self._effect_list.append(effect)
 
-    async def bind_value(self, value: Signal[T]) -> None:
+    async def bind_value(self, value: Ref[T]) -> None:
         async def _func() -> None:
             self._value = value.value
 

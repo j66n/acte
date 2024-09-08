@@ -110,10 +110,7 @@ class HtmlRenderer(Renderer):
             else:
                 raise ValueError(f"Unknown input type: {inline.type}")
 
-            if inline.value is None:
-                el.set("value", "")
-            else:
-                el.set("value", str(inline.value))
+            el.set("value", inline.value)
 
             if inline.hint != '':
                 el.set("title", inline.hint)

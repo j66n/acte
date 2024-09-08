@@ -17,7 +17,7 @@ class Input(Generic[T], Inline, Interactive):
         self._type: InputType = input_type
 
         self._name: str = ''
-        self._value: T | None = None
+        self._value: str = ''
         self._on_fill: Callable[[str], Awaitable[None] | None] | None = None
         self._hint: str = ''
         self._enum: list[T] | None = None
@@ -31,7 +31,7 @@ class Input(Generic[T], Inline, Interactive):
         return self._name
 
     @property
-    def value(self) -> T | None:
+    def value(self) -> str:
         return self._value
 
     @property
@@ -60,7 +60,7 @@ class Input(Generic[T], Inline, Interactive):
 
     async def bind_value(self, value: Ref[T]) -> None:
         async def _func() -> None:
-            self._value = value.value
+            self._value = str(value.value)
 
         effect = await Effect.create(_func)
 

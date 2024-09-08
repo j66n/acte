@@ -3,7 +3,7 @@ from typing import Callable, Awaitable, cast, Any, TypeVar, Type
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
-from acte.node import Input, InputType
+from acte.node import Input, InputKind
 from acte.state import Signal, Compute, Ref
 
 T = TypeVar('T')
@@ -85,7 +85,7 @@ class InputViewer(Base):
     @classmethod
     def _input(
             cls,
-            input_type: InputType,
+            input_kind: InputKind,
             name: Callable[[], str] | Prop[str],
             value: Prop[T] | None,
             on_fill: Prop[Callable[[str], Awaitable[None] | None]] | None,
@@ -107,7 +107,7 @@ class InputViewer(Base):
                 if v == '':
                     await value.set(None)
                 else:
-                    await value.set(input_type(v))
+                    await value.set(input_kind(v))
 
         if on_fill is None:
             on_fill = Ref(None)
@@ -120,7 +120,7 @@ class InputViewer(Base):
 
         cls._append_awaitable(
             cls._input_constructor(
-                input_type,
+                input_kind,
                 name,
                 value,
                 on_fill,
@@ -132,7 +132,7 @@ class InputViewer(Base):
     @classmethod
     async def _input_constructor(
             cls,
-            input_type: InputType,
+            kind: InputKind,
             name: Prop[str],
             value: Prop[Any],
             on_fill: Prop[Callable[[str], Awaitable[None] | None]],
@@ -145,7 +145,7 @@ class InputViewer(Base):
         hint = to_ref(hint)
         enum = to_ref(enum)
 
-        node = Input(input_type)
+        node = Input(kind)
         node.set_interactive_id(cls._generate_interactive_id())
 
         await node.bind_name(name)

@@ -2,7 +2,7 @@ import xml.etree.ElementTree as Et
 from typing import cast
 
 from acte.node import Node, Block, Virtual, Inline, Div, Text, ComponentNode, Root, Button, Dyna, Cache, Input, \
-    InputType
+    InputKind
 from acte.node.implement import Container
 from acte.render.renderer import Renderer
 
@@ -84,7 +84,7 @@ class HtmlRenderer(Renderer):
             )
 
             if inline.hint != '':
-                el.set("title", inline.hint)
+                el.set("hint", inline.hint)
 
             el.text = inline.content
 
@@ -97,23 +97,21 @@ class HtmlRenderer(Renderer):
             if inline.name != '':
                 el.set("name", inline.name)
 
-            if inline.type is str:
-                el.set("type", "text")
-            elif inline.type is int:
-                el.set("type", "number")
-                el.set("step", "1")
-            elif inline.type is float:
-                el.set("type", "number")
-                el.set("step", "any")
-            elif inline.type is bool:
-                el.set("type", "boolean")
+            if inline.kind is str:
+                el.set("kind", "str")
+            elif inline.kind is int:
+                el.set("kind", "int")
+            elif inline.kind is float:
+                el.set("kind", "float")
+            elif inline.kind is bool:
+                el.set("kind", "bool")
             else:
-                raise ValueError(f"Unknown input type: {inline.type}")
+                raise ValueError(f"Unknown input type: {inline.kind}")
 
             el.set("value", inline.value)
 
             if inline.hint != '':
-                el.set("title", inline.hint)
+                el.set("hint", inline.hint)
 
             if inline.enum is not None:
                 el.set("enum", str(inline.enum))

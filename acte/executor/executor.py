@@ -1,7 +1,7 @@
 from acte.build import call_on_display
 from acte.common.util import call_mix
 from acte.executor.action_type import ActionType
-from acte.node import Root, Node, Button, Input, ComponentNode, InputType
+from acte.node import Root, Node, Button, Input, ComponentNode, InputKind
 from acte.node.implement import Interactive, Container
 
 
@@ -67,9 +67,9 @@ class Executor:
                 if value == '':
                     converted_value = None
                 else:
-                    converted_value = node.type(value)
+                    converted_value = node.kind(value)
             except ValueError:
-                raise ValueError(f"Input value is not a {node.type}: {value}")
+                raise ValueError(f"Input value is not a {node.kind}: {value}")
 
             if (node.enum is not None) and (converted_value not in node.enum):
                 raise ValueError(f"Input value is not in enum: {node.enum}")

@@ -6,15 +6,15 @@ from acte.state import Ref, Effect, Signal
 
 T = TypeVar('T', str, int, float, bool)
 
-InputType: TypeAlias = Type[T]
+InputKind: TypeAlias = Type[T]
 
 
 class Input(Generic[T], Inline, Interactive):
-    def __init__(self, input_type: InputType) -> None:
+    def __init__(self, input_kind: InputKind) -> None:
         Inline.__init__(self)
         Interactive.__init__(self)
 
-        self._type: InputType = input_type
+        self._kind: InputKind = input_kind
 
         self._name: str = ''
         self._value: str = ''
@@ -23,8 +23,8 @@ class Input(Generic[T], Inline, Interactive):
         self._enum: list[T] | None = None
 
     @property
-    def type(self) -> InputType:
-        return self._type
+    def kind(self) -> InputKind:
+        return self._kind
 
     @property
     def name(self) -> str:

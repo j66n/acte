@@ -64,10 +64,15 @@ class Executor:
                 raise ValueError("Input value is None")
 
             try:
-                if value != '':
-                    node.type(value)
+                if value == '':
+                    converted_value = None
+                else:
+                    converted_value = node.type(value)
             except ValueError:
                 raise ValueError(f"Input value is not a {node.type}: {value}")
+
+            if (node.enum is not None) and (converted_value not in node.enum):
+                raise ValueError(f"Input value is not in enum: {node.enum}")
 
             if node.on_fill is not None:
                 await call_mix(node.on_fill, value)

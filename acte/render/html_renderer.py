@@ -90,43 +90,34 @@ class HtmlRenderer(Renderer):
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         elif isinstance(inline, Input):
-            if inline.value is None:
-                v = ''
-            else:
-                v = str(inline.value)
+            el = Et.Element("input")
 
-            if inline.type is str:
-                el = Et.Element(
-                    "input",
-                    id=inline.interactive_id,
-                    type="text",
-                    value=v
-                )
-
-            elif inline.type is int:
-                el = Et.Element(
-                    "input",
-                    id=inline.interactive_id,
-                    type="number",
-                    value=v,
-                    step="1"
-                )
-            elif inline.type is float:
-                el = Et.Element(
-                    "input",
-                    id=inline.interactive_id,
-                    type="number",
-                    value=v,
-                    step="any"
-                )
-            else:
-                raise ValueError(f"Unknown input type: {inline.type}")
+            el.set("id", inline.interactive_id)
 
             if inline.name != '':
                 el.set("name", inline.name)
 
+            if inline.type is str:
+                el.set("type", "text")
+            elif inline.type is int:
+                el.set("type", "number")
+                el.set("step", "1")
+            elif inline.type is float:
+                el.set("type", "number")
+                el.set("step", "any")
+            else:
+                raise ValueError(f"Unknown input type: {inline.type}")
+
+            if inline.value is None:
+                el.set("value", "")
+            else:
+                el.set("value", str(inline.value))
+
             if inline.hint != '':
                 el.set("title", inline.hint)
+
+            if inline.enum is not None:
+                el.set("enum", str(inline.enum))
 
             self._output += Et.tostring(el, method='html', encoding="unicode")
         else:

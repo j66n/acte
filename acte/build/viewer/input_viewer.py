@@ -100,7 +100,7 @@ class InputViewer(Base):
         if value is None:
             value = Signal(None)
 
-        if (on_fill is None) and (not isinstance(value, Signal)):
+        if (on_fill is None) and isinstance(value, Signal):
             value = cast(Signal, value)
 
             async def on_fill(v: str) -> None:

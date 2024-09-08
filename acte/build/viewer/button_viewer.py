@@ -24,8 +24,7 @@ class ButtonViewer(Base):
             hint = Compute(hint)
 
         if on_press is None:
-            def on_press() -> None:
-                pass
+            on_press = Ref(None)
 
         cls._append_awaitable(
             cls._button_constructor(

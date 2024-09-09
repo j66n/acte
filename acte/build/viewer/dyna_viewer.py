@@ -27,14 +27,14 @@ class DynaViewer(Base):
 
             view()
 
-            # start: remove children and unmount non-cache children, exclude permanent
+            # start: remove children and unmount non-cache children, exclude persistent
             new_cache_dict = cls._pop_new_cache_dict()
 
-            # start: add permanent cache to new_cache_dict
+            # start: add persistent cache to new_cache_dict
             for identifier, cache in node.cached_dict.items():
-                if cache.permanent and (identifier not in new_cache_dict):
+                if cache.persistent and (identifier not in new_cache_dict):
                     new_cache_dict[identifier] = cache
-            # end: add permanent cache to new_cache_dict
+            # end: add persistent cache to new_cache_dict
 
             node.set_cached_dict(new_cache_dict)
 

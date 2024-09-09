@@ -12,13 +12,13 @@ from acte.node import Cache
 class CacheViewer(Base):
     @classmethod
     @contextlib.contextmanager
-    def cache(cls, identifier: Any, permanent: bool = False) -> Iterator[None]:
+    def cache(cls, identifier: Any, persistent: bool = False) -> Iterator[None]:
         cls._check_skip()
 
         cached = cls._get_cached(identifier)
 
         if cached is None:
-            cls._append_awaitable(cls._enter_new_cache_constructor(identifier, permanent))
+            cls._append_awaitable(cls._enter_new_cache_constructor(identifier, persistent))
         else:
             cls._append_awaitable(cls._enter_cached_constructor(cached))
 
@@ -34,8 +34,8 @@ class CacheViewer(Base):
             cls._append_awaitable(cls._leave_cache_constructor())
 
     @classmethod
-    async def _enter_new_cache_constructor(cls, identifier: Any, permanent: bool) -> None:
-        cache = Cache(identifier, permanent)
+    async def _enter_new_cache_constructor(cls, identifier: Any, persistent: bool) -> None:
+        cache = Cache(identifier, persistent)
         cls._add_cached(cache)  # execute during await cls._call_awaitable_list(), so add to cached
 
         cls._append_container(cache)

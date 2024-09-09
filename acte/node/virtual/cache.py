@@ -5,17 +5,17 @@ from acte.node.implement.container import Container
 
 
 class Cache(Virtual, Container):
-    def __init__(self, identifier: Any, permanent: bool) -> None:
+    def __init__(self, identifier: Any, persistent: bool) -> None:
         Virtual.__init__(self)
         Container.__init__(self)
 
         self._identifier = identifier
-        self._permanent = permanent
+        self._persistent = persistent
 
     @property
     def identifier(self) -> Any:
         return self._identifier
 
     @property
-    def permanent(self) -> bool:
-        return self._permanent
+    def persistent(self) -> bool:
+        return self._persistent

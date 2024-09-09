@@ -1,11 +1,11 @@
-from typing import Callable, Awaitable, cast, Any, TypeVar, Type
+from typing import Callable, Awaitable, cast, Any
 
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
 from acte.node import Input
 from acte.schema.schema import StrSchema, Schema, IntSchema, NumSchema, BoolSchema
-from acte.state import Signal, Compute, Ref
+from acte.state import Signal, Compute, Effect
 
 
 class InputViewer(Base):
@@ -27,11 +27,17 @@ class InputViewer(Base):
         if enum is not None:
             enum = to_ref(enum)
 
-        schema = StrSchema(title, enum)
+        schema = StrSchema()
+
+        schema_attrs = {
+            'title': title,
+            'enum': enum,
+        }
 
         cls._input(
             name,
             schema,
+            schema_attrs,
             value,
             on_set,
         )
@@ -54,11 +60,17 @@ class InputViewer(Base):
         if enum is not None:
             enum = to_ref(enum)
 
-        schema = IntSchema(title, enum)
+        schema = IntSchema()
+
+        schema_attrs = {
+            'title': title,
+            'enum': enum,
+        }
 
         cls._input(
             name,
             schema,
+            schema_attrs,
             value,
             on_set,
         )
@@ -81,11 +93,17 @@ class InputViewer(Base):
         if enum is not None:
             enum = to_ref(enum)
 
-        schema = NumSchema(title, enum)
+        schema = NumSchema()
+
+        schema_attrs = {
+            'title': title,
+            'enum': enum,
+        }
 
         cls._input(
             name,
             schema,
+            schema_attrs,
             value,
             on_set,
         )
@@ -108,11 +126,17 @@ class InputViewer(Base):
         if enum is not None:
             enum = to_ref(enum)
 
-        schema = BoolSchema(title, enum)
+        schema = BoolSchema()
+
+        schema_attrs = {
+            'title': title,
+            'enum': enum,
+        }
 
         cls._input(
             name,
             schema,
+            schema_attrs,
             value,
             on_set,
         )
@@ -121,7 +145,8 @@ class InputViewer(Base):
     def _input(
             cls,
             name: Callable[[], str] | Prop[str],
-            schema: Prop[Schema],
+            schema: Schema,
+            schema_attrs: dict[str, Any],
             value: Prop[Any] | None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
     ) -> None:
@@ -143,6 +168,7 @@ class InputViewer(Base):
             cls._input_constructor(
                 name,
                 schema,
+                schema_attrs,
                 value,
                 on_set,
             )
@@ -152,21 +178,35 @@ class InputViewer(Base):
     async def _input_constructor(
             cls,
             name: Prop[str],
-            schema: Prop[Schema],
+            schema: Schema,
+            schema_attrs: dict[str, Any],
             value: Prop[Any],
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
     ) -> None:
         name = to_ref(name)
-        schema = to_ref(schema)
         value = to_ref(value)
         if on_set is not None:
             on_set = to_ref(on_set)
 
         node = Input()
         node.set_interactive_id(cls._generate_interactive_id())
+        node.set_schema(schema)
+
+        for k, v in schema_attrs.items():
+            if v is None:
+                continue
+
+            async def _(_k=k, _v=v):
+                async def __() -> None:
+                    setter = getattr(schema, f'set_{_k}')
+                    setter(_v.value)
+
+                e = await Effect.create(__)
+                node.add_effect(e)
+
+            await _()
 
         await node.bind_name(name)
-        await node.bind_schema(schema)
         await node.bind_value(value)
         if on_set is not None:
             await node.bind_on_set(on_set)

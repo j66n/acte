@@ -3,11 +3,8 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.state import Ref
-
 
 class Schema:
-
     @abc.abstractmethod
     def resolve(self, data: Any) -> Any:
         pass
@@ -19,21 +16,27 @@ class Schema:
 
 
 class BasicSchema(Schema):
-    def __init__(self, title: Ref[str] | None) -> None:
-        self._title = title
+    def __init__(self) -> None:
+        self._title: str | None = None
 
     @property
-    def title(self) -> Ref[str] | None:
+    def title(self) -> str | None:
         return self._title
+
+    def set_title(self, title: str | None) -> None:
+        self._title = title
 
 
 class StrSchema(BasicSchema):
-    def __init__(
-            self,
-            title: Ref[str] | None = None,
-            enum: Ref[list[str]] | None = None
-    ) -> None:
-        super().__init__(title)
+    def __init__(self) -> None:
+        super().__init__()
+        self._enum: list[str] | None = None
+
+    @property
+    def enum(self) -> list[str] | None:
+        return self._enum
+
+    def set_enum(self, enum: list[str] | None) -> None:
         self._enum = enum
 
     @property
@@ -42,14 +45,13 @@ class StrSchema(BasicSchema):
             "type": "string",
         }
 
+        if self._title is not None:
+            schema['title'] = self._title
+
         if self._enum is not None:
-            schema['enum'] = self._enum.value
+            schema['enum'] = self._enum
 
         return schema
-
-    @property
-    def enum(self) -> Ref[list[str]] | None:
-        return self._enum
 
     def resolve(self, data: Any) -> str:
         jsonschema.validate(data, self.json_schema)
@@ -57,12 +59,15 @@ class StrSchema(BasicSchema):
 
 
 class IntSchema(BasicSchema):
-    def __init__(
-            self,
-            title: Ref[str] | None = None,
-            enum: Ref[list[int]] | None = None
-    ) -> None:
-        super().__init__(title)
+    def __init__(self) -> None:
+        super().__init__()
+        self._enum: list[int] | None = None
+
+    @property
+    def enum(self) -> list[int] | None:
+        return self._enum
+
+    def set_enum(self, enum: list[int] | None) -> None:
         self._enum = enum
 
     @property
@@ -71,14 +76,13 @@ class IntSchema(BasicSchema):
             "type": "integer",
         }
 
+        if self._title is not None:
+            schema['title'] = self._title
+
         if self._enum is not None:
-            schema['enum'] = self._enum.value
+            schema['enum'] = self._enum
 
         return schema
-
-    @property
-    def enum(self) -> Ref[list[int]] | None:
-        return self._enum
 
     def resolve(self, data: Any) -> int:
         jsonschema.validate(data, self.json_schema)
@@ -86,12 +90,15 @@ class IntSchema(BasicSchema):
 
 
 class NumSchema(BasicSchema):
-    def __init__(
-            self,
-            title: Ref[str] | None = None,
-            enum: Ref[list[float]] | None = None
-    ) -> None:
-        super().__init__(title)
+    def __init__(self) -> None:
+        super().__init__()
+        self._enum: list[float] | None = None
+
+    @property
+    def enum(self) -> list[float] | None:
+        return self._enum
+
+    def set_enum(self, enum: list[float] | None) -> None:
         self._enum = enum
 
     @property
@@ -100,14 +107,13 @@ class NumSchema(BasicSchema):
             "type": "number",
         }
 
+        if self._title is not None:
+            schema['title'] = self._title
+
         if self._enum is not None:
-            schema['enum'] = self._enum.value
+            schema['enum'] = self._enum
 
         return schema
-
-    @property
-    def enum(self) -> Ref[list[float]] | None:
-        return self._enum
 
     def resolve(self, data: Any) -> float:
         jsonschema.validate(data, self.json_schema)
@@ -115,13 +121,9 @@ class NumSchema(BasicSchema):
 
 
 class BoolSchema(BasicSchema):
-    def __init__(
-            self,
-            title: Ref[str] | None = None,
-            enum: Ref[list[bool]] | None = None
-    ) -> None:
-        super().__init__(title)
-        self._enum = enum
+    def __init__(self) -> None:
+        super().__init__()
+        self._enum: list[bool] | None = None
 
     @property
     def json_schema(self) -> dict[str, Any]:
@@ -129,13 +131,16 @@ class BoolSchema(BasicSchema):
             "type": "boolean",
         }
 
+        if self._title is not None:
+            schema['title'] = self._title
+
         if self.enum is not None:
-            schema['enum'] = self.enum.value
+            schema['enum'] = self.enum
 
         return schema
 
     @property
-    def enum(self) -> Ref[list[bool]] | None:
+    def enum(self) -> list[bool] | None:
         return self._enum
 
     def resolve(self, data: Any) -> bool:
@@ -144,17 +149,14 @@ class BoolSchema(BasicSchema):
 
 
 class NullSchema(BasicSchema):
-    def __init__(
-            self,
-            title: Ref[str] | None = None,
-    ) -> None:
-        super().__init__(title)
-
     @property
     def json_schema(self) -> dict[str, Any]:
         schema: dict[str, Any] = {
             "type": "null",
         }
+
+        if self._title is not None:
+            schema['title'] = self._title
 
         return schema
 

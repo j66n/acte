@@ -1,11 +1,11 @@
-from typing import Callable, Awaitable
+from typing import Callable, Awaitable, cast
 
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
 from acte.node import Button
 from acte.schema.schema import NullSchema
-from acte.state import Compute, Ref
+from acte.state import Compute, Ref, Signal, Effect
 
 
 class ButtonViewer(Base):
@@ -24,15 +24,10 @@ class ButtonViewer(Base):
         if callable(title):
             title = Compute(title)
 
-        if title is not None:
-            title = to_ref(title)
-
-        schema = NullSchema(title)
-
         cls._append_awaitable(
             cls._button_constructor(
                 content,
-                schema,
+                title,
                 on_press,
             )
         )
@@ -41,19 +36,29 @@ class ButtonViewer(Base):
     async def _button_constructor(
             cls,
             content: Prop[str],
-            schema: Prop[NullSchema],
+            title: Prop[str] | None,
             on_press: Prop[Callable[[], Awaitable[None] | None]] | None,
     ) -> None:
         content = to_ref(content)
-        schema = to_ref(schema)
+        if title is not None:
+            title = to_ref(title)
         if on_press is not None:
             on_press = to_ref(on_press)
 
         node = Button()
         node.set_interactive_id(cls._generate_interactive_id())
+        node.set_schema(NullSchema())
 
         await node.bind_content(content)
-        await node.bind_schema(schema)
+
+        if title is not None:
+            async def _() -> None:
+                schema = cast(NullSchema, node.schema)
+                schema.set_title(title.value)
+
+            e = await Effect.create(_)
+            node.add_effect(e)
+
         if on_press is not None:
             await node.bind_on_press(on_press)
 

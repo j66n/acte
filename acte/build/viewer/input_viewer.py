@@ -15,31 +15,16 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[str] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            title: Callable[[], str] | Prop[str] | None = None,
-            enum: Prop[list[str]] | None = None,
+            schema: StrSchema | None = None,
     ) -> None:
-        if callable(title):
-            title = Compute(title)
-
-        if title is not None:
-            title = to_ref(title)
-
-        if enum is not None:
-            enum = to_ref(enum)
-
-        schema = StrSchema()
-
-        schema_attrs = {
-            'title': title,
-            'enum': enum,
-        }
+        if schema is None:
+            schema = StrSchema()
 
         cls._input(
             name,
-            schema,
-            schema_attrs,
             value,
             on_set,
+            schema,
         )
 
     @classmethod
@@ -48,31 +33,16 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[int] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            title: Callable[[], str] | Prop[str] | None = None,
-            enum: Prop[list[int]] | None = None,
+            schema: IntSchema | None = None,
     ) -> None:
-        if callable(title):
-            title = Compute(title)
-
-        if title is not None:
-            title = to_ref(title)
-
-        if enum is not None:
-            enum = to_ref(enum)
-
-        schema = IntSchema()
-
-        schema_attrs = {
-            'title': title,
-            'enum': enum,
-        }
+        if schema is None:
+            schema = IntSchema()
 
         cls._input(
             name,
-            schema,
-            schema_attrs,
             value,
             on_set,
+            schema,
         )
 
     @classmethod
@@ -81,31 +51,16 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            title: Callable[[], str] | Prop[str] | None = None,
-            enum: Prop[list[float]] | None = None,
+            schema: NumSchema | None = None,
     ) -> None:
-        if callable(title):
-            title = Compute(title)
-
-        if title is not None:
-            title = to_ref(title)
-
-        if enum is not None:
-            enum = to_ref(enum)
-
-        schema = NumSchema()
-
-        schema_attrs = {
-            'title': title,
-            'enum': enum,
-        }
+        if schema is None:
+            schema = NumSchema()
 
         cls._input(
             name,
-            schema,
-            schema_attrs,
             value,
             on_set,
+            schema,
         )
 
     @classmethod
@@ -114,41 +69,25 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[bool] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            title: Callable[[], str] | Prop[str] | None = None,
-            enum: Prop[list[bool]] | None = None,
+            schema: BoolSchema | None = None,
     ) -> None:
-        if callable(title):
-            title = Compute(title)
-
-        if title is not None:
-            title = to_ref(title)
-
-        if enum is not None:
-            enum = to_ref(enum)
-
-        schema = BoolSchema()
-
-        schema_attrs = {
-            'title': title,
-            'enum': enum,
-        }
+        if schema is None:
+            schema = BoolSchema()
 
         cls._input(
             name,
-            schema,
-            schema_attrs,
             value,
             on_set,
+            schema,
         )
 
     @classmethod
     def _input(
             cls,
             name: Callable[[], str] | Prop[str],
-            schema: Schema,
-            schema_attrs: dict[str, Any],
             value: Prop[Any] | None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
+            schema: Schema,
     ) -> None:
         cls._check_skip()
 
@@ -167,10 +106,9 @@ class InputViewer(Base):
         cls._append_awaitable(
             cls._input_constructor(
                 name,
-                schema,
-                schema_attrs,
                 value,
                 on_set,
+                schema,
             )
         )
 
@@ -178,10 +116,9 @@ class InputViewer(Base):
     async def _input_constructor(
             cls,
             name: Prop[str],
-            schema: Schema,
-            schema_attrs: dict[str, Any],
             value: Prop[Any],
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
+            schema: Schema,
     ) -> None:
         name = to_ref(name)
         value = to_ref(value)
@@ -191,20 +128,6 @@ class InputViewer(Base):
         node = Input()
         node.set_interactive_id(cls._generate_interactive_id())
         node.set_schema(schema)
-
-        for k, v in schema_attrs.items():
-            if v is None:
-                continue
-
-            async def _(_k=k, _v=v):
-                async def __() -> None:
-                    setter = getattr(schema, f'set_{_k}')
-                    setter(_v.value)
-
-                e = await Effect.create(__)
-                node.add_effect(e)
-
-            await _()
 
         await node.bind_name(name)
         await node.bind_value(value)

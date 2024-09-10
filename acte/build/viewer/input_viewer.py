@@ -122,8 +122,7 @@ class InputViewer(Base):
     ) -> None:
         name = to_ref(name)
         value = to_ref(value)
-        if on_set is not None:
-            on_set = to_ref(on_set)
+        on_set = to_ref(on_set)
         schema = to_ref(schema)
 
         node = Input()
@@ -131,8 +130,7 @@ class InputViewer(Base):
 
         await node.bind_name(name)
         await node.bind_value(value)
-        if on_set is not None:
-            await node.bind_on_set(on_set)
+        await node.bind_on_set(on_set)
         await node.bind_schema(schema)
 
         cls._attach_to_container(node)

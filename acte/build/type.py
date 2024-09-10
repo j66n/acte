@@ -7,7 +7,7 @@ T = TypeVar('T')
 Prop: TypeAlias = Ref[T] | T
 
 
-def to_ref(value: Prop[T]) -> Ref[T]:
+def to_ref(value: Prop[T] | None) -> Ref[T]:
     if isinstance(value, Ref):
         return value
 

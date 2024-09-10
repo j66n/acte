@@ -41,8 +41,7 @@ class ButtonViewer(Base):
     ) -> None:
         content = to_ref(content)
         schema = to_ref(schema)
-        if on_press is not None:
-            on_press = to_ref(on_press)
+        on_press = to_ref(on_press)
 
         node = Button()
         node.set_interactive_id(cls._generate_interactive_id())

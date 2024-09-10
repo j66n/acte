@@ -5,7 +5,7 @@ from acte.build.viewer.common.base import Base
 
 from acte.node import Input
 from acte.schema.schema import StrSchema, Schema, IntSchema, NumSchema, BoolSchema
-from acte.state import Signal, Compute, Effect
+from acte.state import Signal, Compute
 
 
 class InputViewer(Base):
@@ -15,7 +15,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[str] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            schema: StrSchema | None = None,
+            schema: Prop[StrSchema] | None = None,
     ) -> None:
         if schema is None:
             schema = StrSchema()
@@ -33,7 +33,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[int] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            schema: IntSchema | None = None,
+            schema: Prop[IntSchema] | None = None,
     ) -> None:
         if schema is None:
             schema = IntSchema()
@@ -51,7 +51,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            schema: NumSchema | None = None,
+            schema: Prop[NumSchema] | None = None,
     ) -> None:
         if schema is None:
             schema = NumSchema()
@@ -69,7 +69,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[bool] | None = None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
-            schema: BoolSchema | None = None,
+            schema: Prop[BoolSchema] | None = None,
     ) -> None:
         if schema is None:
             schema = BoolSchema()
@@ -87,7 +87,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str],
             value: Prop[Any] | None,
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
-            schema: Schema,
+            schema: Prop[Schema],
     ) -> None:
         cls._check_skip()
 
@@ -118,20 +118,21 @@ class InputViewer(Base):
             name: Prop[str],
             value: Prop[Any],
             on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
-            schema: Schema,
+            schema: Prop[Schema],
     ) -> None:
         name = to_ref(name)
         value = to_ref(value)
         if on_set is not None:
             on_set = to_ref(on_set)
+        schema = to_ref(schema)
 
         node = Input()
         node.set_interactive_id(cls._generate_interactive_id())
-        node.set_schema(schema)
 
         await node.bind_name(name)
         await node.bind_value(value)
         if on_set is not None:
             await node.bind_on_set(on_set)
+        await node.bind_schema(schema)
 
         cls._attach_to_container(node)

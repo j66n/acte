@@ -14,20 +14,20 @@ class ButtonViewer(Base):
             cls,
             content: Callable[[], str] | Prop[str] = '',
             on_press: Prop[Callable[[], Awaitable[None] | None]] | None = None,
-            title: Callable[[], str] | Prop[str] | None = None,
+            schema: Prop[NullSchema] | None = None,
     ) -> None:
         cls._check_skip()
 
         if callable(content):
             content = Compute(content)
 
-        if callable(title):
-            title = Compute(title)
+        if schema is None:
+            schema = NullSchema()
 
         cls._append_awaitable(
             cls._button_constructor(
                 content,
-                title,
+                schema,
                 on_press,
             )
         )
@@ -36,28 +36,19 @@ class ButtonViewer(Base):
     async def _button_constructor(
             cls,
             content: Prop[str],
-            title: Prop[str] | None,
+            schema: Prop[NullSchema],
             on_press: Prop[Callable[[], Awaitable[None] | None]] | None,
     ) -> None:
         content = to_ref(content)
-        if title is not None:
-            title = to_ref(title)
+        schema = to_ref(schema)
         if on_press is not None:
             on_press = to_ref(on_press)
 
         node = Button()
         node.set_interactive_id(cls._generate_interactive_id())
-        node.set_schema(NullSchema())
 
         await node.bind_content(content)
-
-        if title is not None:
-            async def _() -> None:
-                schema = cast(NullSchema, node.schema)
-                schema.set_title(title.value)
-
-            e = await Effect.create(_)
-            node.add_effect(e)
+        await node.bind_schema(schema)
 
         if on_press is not None:
             await node.bind_on_press(on_press)

@@ -39,8 +39,13 @@ class Button(Inline, Interactive):
 
         self._effect_list.append(effect)
 
-    def set_schema(self, schema: NullSchema) -> None:
-        self._schema = schema
+    async def bind_schema(self, schema: Ref[NullSchema]) -> None:
+        async def _func() -> None:
+            self._schema = schema.value
+
+        effect = await Effect.create(_func)
+
+        self._effect_list.append(effect)
 
     async def bind_on_press(self, on_press: Ref[Callable[[], Awaitable[None] | None]]) -> None:
         async def _func() -> None:

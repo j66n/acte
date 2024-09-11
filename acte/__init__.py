@@ -16,4 +16,5 @@ __all__ = [
     "chatbot",
     "server",
     "session",
+    "schema",
 ]

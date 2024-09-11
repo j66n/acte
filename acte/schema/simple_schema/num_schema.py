@@ -1,11 +1,11 @@
 from typing import Any
 
-import jsonschema
+import jsonschema  # type: ignore
 
-from acte.schema.base_schema.base_schema import BasicSchema
+from acte.schema.simple_schema.simple_schema import SimpleSchema
 
 
-class NumSchema(BasicSchema):
+class NumSchema(SimpleSchema):
     def __init__(self) -> None:
         super().__init__()
         self._enum: list[float] | None = None

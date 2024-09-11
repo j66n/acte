@@ -2,7 +2,7 @@ from typing import Callable, Awaitable
 
 from acte.node.element.inline.inline import Inline
 from acte.node.implement.interactive import Interactive
-from acte.schema.schema import NullSchema
+from acte.schema.simple_schema.null_schema import NullSchema
 from acte.state import Effect, Ref
 
 

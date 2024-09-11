@@ -1,12 +1,12 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Any
 
-import jsonschema
+import jsonschema  # type: ignore
 
 from acte.schema.schema import Schema
 
 
-class BasicSchema(Schema, ABC):
+class SimpleSchema(Schema, ABC):
     def __init__(self) -> None:
         self._title: str | None = None
 
@@ -17,6 +17,6 @@ class BasicSchema(Schema, ABC):
     def set_title(self, title: str | None) -> None:
         self._title = title
 
-    def resolve(self, data: Any) -> int:
-        jsonschema.validate(data, self.json_schema)
-        return int(data)
+    @abstractmethod
+    def resolve(self, data: Any) -> Any:
+        pass

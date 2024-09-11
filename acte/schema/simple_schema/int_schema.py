@@ -1,9 +1,11 @@
 from typing import Any
 
-from acte.schema.base_schema.base_schema import BasicSchema
+import jsonschema  # type: ignore
+
+from acte.schema.simple_schema.simple_schema import SimpleSchema
 
 
-class IntSchema(BasicSchema):
+class IntSchema(SimpleSchema):
     def __init__(self) -> None:
         super().__init__()
         self._enum: list[int] | None = None
@@ -28,3 +30,7 @@ class IntSchema(BasicSchema):
             schema['enum'] = self._enum
 
         return schema
+
+    def resolve(self, data: Any) -> int:
+        jsonschema.validate(data, self.json_schema)
+        return int(data)

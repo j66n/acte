@@ -1,15 +1,15 @@
 from typing import Any
 
-import jsonschema
+import jsonschema  # type: ignore
 
-from acte.schema.base_schema.base_schema import BasicSchema
+from acte.schema.simple_schema.simple_schema import SimpleSchema
 from acte.schema.schema import Schema
 
 
-class ArraySchema(BasicSchema):
+class ArraySchema(SimpleSchema):
     def __init__(self) -> None:
         super().__init__()
-        self._enum: list[Any] | None = None
+        self._enum: list[list[Any]] | None = None
         self._items: Schema | None = None
 
     @property
@@ -17,11 +17,14 @@ class ArraySchema(BasicSchema):
         return self._enum
 
     @property
-    def items(self) -> Schema:
+    def items(self) -> Schema | None:
         return self._items
 
     def set_enum(self, enum: list[list[Any]] | None) -> None:
         self._enum = enum
+
+    def set_items(self, items: Schema | None) -> None:
+        self._items = items
 
     @property
     def json_schema(self) -> dict[str, Any]:
@@ -39,4 +42,4 @@ class ArraySchema(BasicSchema):
 
     def resolve(self, data: Any) -> list[Any]:
         jsonschema.validate(data, self.json_schema)
-        return
+        return data

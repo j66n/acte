@@ -4,7 +4,11 @@ from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
 
 from acte.node import Input
-from acte.schema.schema import StrSchema, Schema, IntSchema, NumSchema, BoolSchema
+from acte.schema.schema import Schema
+from acte.schema.simple_schema.bool_schema import BoolSchema
+from acte.schema.simple_schema.int_schema import IntSchema
+from acte.schema.simple_schema.num_schema import NumSchema
+from acte.schema.simple_schema.str_schema import StrSchema
 from acte.state import Signal, Compute
 
 

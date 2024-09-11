@@ -1,9 +1,9 @@
 from typing import Any
 
-from acte.schema.base_schema.base_schema import BasicSchema
+from acte.schema.simple_schema.simple_schema import SimpleSchema
 
 
-class NullSchema(BasicSchema):
+class NullSchema(SimpleSchema):
     @property
     def json_schema(self) -> dict[str, Any]:
         schema: dict[str, Any] = {

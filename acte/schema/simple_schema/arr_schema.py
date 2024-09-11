@@ -6,7 +6,7 @@ from acte.schema.simple_schema.simple_schema import SimpleSchema
 from acte.schema.schema import Schema
 
 
-class ArraySchema(SimpleSchema):
+class ArrSchema(SimpleSchema):
     def __init__(self) -> None:
         super().__init__()
         self._enum: list[list[Any]] | None = None

@@ -1,6 +1,6 @@
 from acte.schema.schema import Schema
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+from acte.schema.simple_schema.base_schema import BaseSchema
 
 from acte.schema.simple_schema.bool_schema import BoolSchema
 from acte.schema.simple_schema.int_schema import IntSchema
@@ -12,7 +12,7 @@ from acte.schema.simple_schema.null_schema import NullSchema
 
 __all__ = [
     'Schema',
-    'SimpleSchema',
+    'BaseSchema',
 
     'BoolSchema',
     'IntSchema',

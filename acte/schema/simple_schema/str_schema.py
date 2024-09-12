@@ -2,32 +2,43 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+from acte.schema import Schema
+from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class StrSchema(SimpleSchema):
-    def __init__(self) -> None:
-        super().__init__()
-        self._enum: list[str] | None = None
-
-    @property
-    def enum(self) -> list[str] | None:
-        return self._enum
-
-    def set_enum(self, enum: list[str] | None) -> None:
-        self._enum = enum
+class StrSchema(BaseSchema):
+    def __init__(
+            self,
+            title: str | None = None,
+            description: str | None = None,
+            enum: list[str] | None = None,
+            const: Any | None = None,
+            all_of: list[Schema] | None = None,
+            one_of: list[Schema] | None = None,
+            any_of: list[Schema] | None = None,
+            not_: Schema | None = None,
+            if_: Schema | None = None,
+            then: Schema | None = None,
+            else_: Schema | None = None,
+    ) -> None:
+        super().__init__(
+            type_="string",
+            title=title,
+            description=description,
+            enum=enum,
+            const=const,
+            all_of=all_of,
+            one_of=one_of,
+            any_of=any_of,
+            not_=not_,
+            if_=if_,
+            then=then,
+            else_=else_,
+        )
 
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": "string",
-        }
-
-        if self._title is not None:
-            schema['title'] = self._title
-
-        if self._enum is not None:
-            schema['enum'] = self._enum
+        schema = super().json_schema
 
         return schema
 

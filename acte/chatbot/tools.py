@@ -38,8 +38,7 @@ tools = [
                                 "value": {
                                     "description": "When the action_type is 'set', "
                                                    "the value is required."
-                                                   "The value is what you would like to fill with the input field, "
-                                                   "and the value type depends on the input field requirements",
+                                                   "The type of value should be consistent with the field schema. "
                                 }
                             },
                             "required": ["target_id", "action_type"],

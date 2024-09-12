@@ -2,41 +2,72 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+from acte.schema.simple_schema.base_schema import BaseSchema
 from acte.schema.schema import Schema
 
 
-class ArrSchema(SimpleSchema):
-    def __init__(self) -> None:
-        super().__init__()
-        self._enum: list[list[Any]] | None = None
-        self._items: Schema | None = None
+class ArrSchema(BaseSchema):
+    def __init__(
+            self,
+            title: str | None = None,
+            description: str | None = None,
+            enum: list[dict[str, Any]] | None = None,
+            const: Any | None = None,
+            all_of: list[Schema] | None = None,
+            one_of: list[Schema] | None = None,
+            any_of: list[Schema] | None = None,
+            not_: Schema | None = None,
+            if_: Schema | None = None,
+            then: Schema | None = None,
+            else_: Schema | None = None,
 
-    @property
-    def enum(self) -> list[list[Any]] | None:
-        return self._enum
+            items: Schema | None = None,
+            unique_items: bool | None = None,
+            min_items: int | None = None,
+    ) -> None:
+        super().__init__(
+            type_="array",
+            title=title,
+            description=description,
+            enum=enum,
+            const=const,
+            all_of=all_of,
+            one_of=one_of,
+            any_of=any_of,
+            not_=not_,
+            if_=if_,
+            then=then,
+            else_=else_,
+        )
+
+        self._items: Schema | None = items
+        self._unique_items: bool | None = unique_items
+        self._min_items: int | None = min_items
 
     @property
     def items(self) -> Schema | None:
         return self._items
 
-    def set_enum(self, enum: list[list[Any]] | None) -> None:
-        self._enum = enum
+    @property
+    def unique_items(self) -> bool | None:
+        return self._unique_items
 
-    def set_items(self, items: Schema | None) -> None:
-        self._items = items
+    @property
+    def min_items(self) -> int | None:
+        return self._min_items
 
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": "array",
-        }
+        schema = super().json_schema
 
-        if self._title is not None:
-            schema['title'] = self._title
+        if self.items is not None:
+            schema["items"] = self.items.json_schema
 
-        if self._enum is not None:
-            schema['enum'] = self._enum
+        if self.unique_items is not None:
+            schema["uniqueItems"] = self.unique_items
+
+        if self.min_items is not None:
+            schema["minItems"] = self.min_items
 
         return schema
 

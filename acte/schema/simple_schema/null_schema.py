@@ -1,19 +1,46 @@
 from typing import Any
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+import jsonschema  # type: ignore
+
+from acte.schema import Schema
+from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class NullSchema(SimpleSchema):
+class NullSchema(BaseSchema):
+    def __init__(
+            self,
+            title: str | None = None,
+            description: str | None = None,
+            enum: list[dict[str, Any]] | None = None,
+            const: Any | None = None,
+            all_of: list[Schema] | None = None,
+            one_of: list[Schema] | None = None,
+            any_of: list[Schema] | None = None,
+            not_: Schema | None = None,
+            if_: Schema | None = None,
+            then: Schema | None = None,
+            else_: Schema | None = None,
+    ) -> None:
+        super().__init__(
+            type_="null",
+            title=title,
+            description=description,
+            enum=enum,
+            const=const,
+            all_of=all_of,
+            one_of=one_of,
+            any_of=any_of,
+            not_=not_,
+            if_=if_,
+            then=then,
+            else_=else_,
+        )
+
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": "null",
-        }
-
-        if self._title is not None:
-            schema['title'] = self._title
-
+        schema = super().json_schema
         return schema
 
     def resolve(self, data: Any) -> None:
+        jsonschema.validate(data, self.json_schema)
         return None

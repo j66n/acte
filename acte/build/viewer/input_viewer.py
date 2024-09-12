@@ -19,7 +19,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[str] | None = None,
             on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[StrSchema] | None = None,
+            schema: Prop[Schema] | None = None,
     ) -> None:
         if schema is None:
             schema = StrSchema()
@@ -37,7 +37,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[int] | None = None,
             on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[IntSchema] | None = None,
+            schema: Prop[Schema] | None = None,
     ) -> None:
         if schema is None:
             schema = IntSchema()
@@ -55,7 +55,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
             on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[NumSchema] | None = None,
+            schema: Prop[Schema] | None = None,
     ) -> None:
         if schema is None:
             schema = NumSchema()
@@ -73,7 +73,7 @@ class InputViewer(Base):
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[bool] | None = None,
             on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[BoolSchema] | None = None,
+            schema: Prop[Schema] | None = None,
     ) -> None:
         if schema is None:
             schema = BoolSchema()

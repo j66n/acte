@@ -2,32 +2,63 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+from acte.schema import Schema
+from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class IntSchema(SimpleSchema):
-    def __init__(self) -> None:
-        super().__init__()
-        self._enum: list[int] | None = None
+class IntSchema(BaseSchema):
+    def __init__(
+            self,
+            title: str | None = None,
+            description: str | None = None,
+            enum: list[int] | None = None,
+            const: Any | None = None,
+            all_of: list[Schema] | None = None,
+            one_of: list[Schema] | None = None,
+            any_of: list[Schema] | None = None,
+            not_: Schema | None = None,
+            if_: Schema | None = None,
+            then: Schema | None = None,
+            else_: Schema | None = None,
+
+            minimum: int | None = None,
+            maximum: int | None = None,
+    ) -> None:
+        super().__init__(
+            type_="integer",
+            title=title,
+            description=description,
+            enum=enum,
+            const=const,
+            all_of=all_of,
+            one_of=one_of,
+            any_of=any_of,
+            not_=not_,
+            if_=if_,
+            then=then,
+            else_=else_,
+        )
+
+        self._minimum = minimum
+        self._maximum = maximum
 
     @property
-    def enum(self) -> list[int] | None:
-        return self._enum
+    def minimum(self) -> int | None:
+        return self._minimum
 
-    def set_enum(self, enum: list[int] | None) -> None:
-        self._enum = enum
+    @property
+    def maximum(self) -> int | None:
+        return self._maximum
 
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": "integer",
-        }
+        schema = super().json_schema
 
-        if self._title is not None:
-            schema['title'] = self._title
+        if self.minimum is not None:
+            schema["minimum"] = self.minimum
 
-        if self._enum is not None:
-            schema['enum'] = self._enum
+        if self.maximum is not None:
+            schema["maximum"] = self.maximum
 
         return schema
 

@@ -82,9 +82,6 @@ class HtmlRenderer(Renderer):
                 id=inline.interactive_id,
             )
 
-            if inline.schema is not None:
-                el.set("schema", str(inline.schema.json_schema))
-
             el.text = inline.content
 
             self._output += Et.tostring(el, method='html', encoding="unicode")

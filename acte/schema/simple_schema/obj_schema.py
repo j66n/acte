@@ -2,20 +2,50 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.schema.simple_schema.simple_schema import SimpleSchema
+from acte.schema.simple_schema.base_schema import BaseSchema
 from acte.schema.schema import Schema
 
 
-class ObjSchema(SimpleSchema):
-    def __init__(self) -> None:
-        super().__init__()
-        self._enum: list[dict[str, Any]] | None = None
-        self._properties: dict[str, Schema] | None = None
-        self._required: list[str] | None = None
+class ObjSchema(BaseSchema):
+    def __init__(
+            self,
+            title: str | None = None,
+            description: str | None = None,
+            enum: list[dict[str, Any]] | None = None,
+            const: Any | None = None,
+            all_of: list[Schema] | None = None,
+            one_of: list[Schema] | None = None,
+            any_of: list[Schema] | None = None,
+            not_: Schema | None = None,
+            if_: Schema | None = None,
+            then: Schema | None = None,
+            else_: Schema | None = None,
 
-    @property
-    def enum(self) -> list[dict[str, Any]] | None:
-        return self._enum
+            properties: dict[str, Schema] | None = None,
+            required: list[str] | None = None,
+            additional_properties: bool | None = None
+    ) -> None:
+        super().__init__(
+            type_="object",
+            title=title,
+            description=description,
+            enum=enum,
+            const=const,
+            all_of=all_of,
+            one_of=one_of,
+            any_of=any_of,
+            not_=not_,
+            if_=if_,
+            then=then,
+            else_=else_,
+        )
+
+        self._properties = properties
+        self._required = required
+        self._additional_properties = additional_properties
+
+    def __getitem__(self, key) -> Schema | None:
+        return self._properties.get(key) if self._properties is not None else None
 
     @property
     def properties(self) -> dict[str, Schema] | None:
@@ -25,26 +55,25 @@ class ObjSchema(SimpleSchema):
     def required(self) -> list[str] | None:
         return self._required
 
-    def set_enum(self, enum: list[dict[str, Any]] | None) -> None:
-        self._enum = enum
-
-    def set_properties(self, properties: dict[str, Schema] | None) -> None:
-        self._properties = properties
-
-    def set_required(self, required: list[str] | None) -> None:
-        self._required = required
+    @property
+    def additional_properties(self) -> bool | None:
+        return self._additional_properties
 
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": "array",
-        }
+        schema = super().json_schema
 
-        if self._title is not None:
-            schema['title'] = self._title
+        if self._properties is not None:
+            schema['properties'] = {
+                key: value.json_schema
+                for key, value in self._properties.items()
+            }
 
-        if self._enum is not None:
-            schema['enum'] = self._enum
+        if self._required is not None:
+            schema['required'] = self._required
+
+        if self._additional_properties is not None:
+            schema['additionalProperties'] = self._additional_properties
 
         return schema
 

@@ -206,6 +206,8 @@ class Menu(Component):
 server = Server(
    session_manager=SessionManager(Menu, debug=True),
    chatbot=OpenaiChatbot(
+      system_message="You are restaurant assistant to help customers to order food through App. "
+                     "You should confirm before Checkout",
       api_key="YOUR OPENAI API KEY",
    )
 )

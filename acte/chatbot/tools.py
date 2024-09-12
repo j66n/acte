@@ -4,7 +4,7 @@ tools = [
         "function": {
             "name": "new_session",
             "strict": True,
-            "description": "Start a new App session, then display the session's latest screen.",
+            "description": "Start a new App session, and the return value is the session's latest screen.",
         },
     },
     {
@@ -12,7 +12,8 @@ tools = [
         "function": {
             "name": "execute",
             "strict": True,
-            "description": "Execute one or more action(s), then display the session's latest screen.",
+            "description": "Execute one or more action(s), "
+                           "and the return value is the session's latest screen.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -31,11 +32,14 @@ tools = [
                                 "action_type": {
                                     "type": "string",
                                     "enum": ["press", "set"],
-                                    "description": "press: press the button;"
+                                    "description": "press: press the button; "
                                                    "set: set the input field's value"
                                 },
                                 "value": {
-                                    "description": "When the action_type is 'input', the value is the input value.",
+                                    "description": "When the action_type is 'set', "
+                                                   "the value is required."
+                                                   "The value is what you would like to fill with the input field, "
+                                                   "and the value type depends on the input field requirements",
                                 }
                             },
                             "required": ["target_id", "action_type"],
@@ -51,7 +55,7 @@ tools = [
         "function": {
             "name": "display",
             "strict": True,
-            "description": "Display the session's latest screen.",
+            "description": "The return value is the session's latest screen.",
             "parameters": {
                 "type": "object",
                 "properties": {

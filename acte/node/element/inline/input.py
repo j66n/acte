@@ -14,7 +14,7 @@ class Input(Inline, Interactive):
         self._name: str = ''
         self._schema: Schema | None = None
         self._value: Any = None
-        self._on_set: Callable[[str], Awaitable[None] | None] | None = None
+        self._on_set: Callable[[Any], Awaitable[None] | None] | None = None
 
     @property
     def name(self) -> str:
@@ -60,7 +60,7 @@ class Input(Inline, Interactive):
 
         self._effect_list.append(effect)
 
-    async def bind_on_set(self, on_set: Ref[Callable[[str], Awaitable[None] | None]]) -> None:
+    async def bind_on_set(self, on_set: Ref[Callable[[Any], Awaitable[None] | None]]) -> None:
         async def _func() -> None:
             self._on_set = on_set.value
 

@@ -18,7 +18,7 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[str] | None = None,
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
             schema: Prop[StrSchema] | None = None,
     ) -> None:
         if schema is None:
@@ -36,7 +36,7 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Prop[int] | None = None,
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
             schema: Prop[IntSchema] | None = None,
     ) -> None:
         if schema is None:
@@ -54,7 +54,7 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[float] | None = None,
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
             schema: Prop[NumSchema] | None = None,
     ) -> None:
         if schema is None:
@@ -72,7 +72,7 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str] = '',
             value: Signal[bool] | None = None,
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None = None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
             schema: Prop[BoolSchema] | None = None,
     ) -> None:
         if schema is None:
@@ -90,7 +90,7 @@ class InputViewer(Base):
             cls,
             name: Callable[[], str] | Prop[str],
             value: Prop[Any] | None,
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None,
             schema: Prop[Schema],
     ) -> None:
         cls._check_skip()
@@ -121,7 +121,7 @@ class InputViewer(Base):
             cls,
             name: Prop[str],
             value: Prop[Any],
-            on_set: Prop[Callable[[str], Awaitable[None] | None]] | None,
+            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None,
             schema: Prop[Schema],
     ) -> None:
         name = to_ref(name)

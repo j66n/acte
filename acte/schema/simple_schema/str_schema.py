@@ -9,6 +9,7 @@ from acte.schema.simple_schema.base_schema import BaseSchema
 class StrSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'string',
             title: str | None = None,
             description: str | None = None,
             enum: list[str] | None = None,
@@ -20,9 +21,12 @@ class StrSchema(BaseSchema):
             if_: Schema | None = None,
             then: Schema | None = None,
             else_: Schema | None = None,
+
+            min_length: int | None = None,
+            max_length: int | None = None,
     ) -> None:
         super().__init__(
-            type_="string",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,
@@ -36,9 +40,18 @@ class StrSchema(BaseSchema):
             else_=else_,
         )
 
+        self.min_length = min_length
+        self.max_length = max_length
+
     @property
     def json_schema(self) -> dict[str, Any]:
         schema = super().json_schema
+
+        if self.min_length is not None:
+            schema["minLength"] = self.min_length
+
+        if self.max_length is not None:
+            schema["maxLength"] = self.max_length
 
         return schema
 

@@ -9,6 +9,7 @@ from acte.schema.simple_schema.base_schema import BaseSchema
 class IntSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'integer',
             title: str | None = None,
             description: str | None = None,
             enum: list[int] | None = None,
@@ -25,7 +26,7 @@ class IntSchema(BaseSchema):
             maximum: int | None = None,
     ) -> None:
         super().__init__(
-            type_="integer",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,

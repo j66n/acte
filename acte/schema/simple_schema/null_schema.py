@@ -9,6 +9,7 @@ from acte.schema.simple_schema.base_schema import BaseSchema
 class NullSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'null',
             title: str | None = None,
             description: str | None = None,
             enum: list[dict[str, Any]] | None = None,
@@ -22,7 +23,7 @@ class NullSchema(BaseSchema):
             else_: Schema | None = None,
     ) -> None:
         super().__init__(
-            type_="null",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,

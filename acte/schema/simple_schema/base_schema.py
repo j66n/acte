@@ -84,9 +84,10 @@ class BaseSchema(Schema):
 
     @property
     def json_schema(self) -> dict[str, Any]:
-        schema: dict[str, Any] = {
-            "type": self.type
-        }
+        schema: dict[str, Any] = {}
+
+        if self._type is not None:
+            schema['type'] = self._type
 
         if self._title is not None:
             schema['title'] = self._title

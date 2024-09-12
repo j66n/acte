@@ -9,6 +9,7 @@ from acte.schema.simple_schema.base_schema import BaseSchema
 class BoolSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'boolean',
             title: str | None = None,
             description: str | None = None,
             enum: list[bool] | None = None,
@@ -22,7 +23,7 @@ class BoolSchema(BaseSchema):
             else_: Schema | None = None,
     ) -> None:
         super().__init__(
-            type_="boolean",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,

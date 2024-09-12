@@ -9,6 +9,7 @@ from acte.schema.simple_schema.base_schema import BaseSchema
 class NumSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'number',
             title: str | None = None,
             description: str | None = None,
             enum: list[None] | None = None,
@@ -25,7 +26,7 @@ class NumSchema(BaseSchema):
             maximum: float | None = None,
     ) -> None:
         super().__init__(
-            type_="number",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,

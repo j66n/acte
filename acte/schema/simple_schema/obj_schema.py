@@ -9,6 +9,7 @@ from acte.schema.schema import Schema
 class ObjSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = 'object',
             title: str | None = None,
             description: str | None = None,
             enum: list[dict[str, Any]] | None = None,
@@ -26,7 +27,7 @@ class ObjSchema(BaseSchema):
             additional_properties: bool | None = None
     ) -> None:
         super().__init__(
-            type_="object",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,
@@ -78,5 +79,6 @@ class ObjSchema(BaseSchema):
         return schema
 
     def resolve(self, data: Any) -> dict[str, Any]:
+        print(self.json_schema)
         jsonschema.validate(data, self.json_schema)
         return data

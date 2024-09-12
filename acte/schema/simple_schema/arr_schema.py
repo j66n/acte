@@ -9,6 +9,7 @@ from acte.schema.schema import Schema
 class ArrSchema(BaseSchema):
     def __init__(
             self,
+            type_: str | None = "array",
             title: str | None = None,
             description: str | None = None,
             enum: list[dict[str, Any]] | None = None,
@@ -26,7 +27,7 @@ class ArrSchema(BaseSchema):
             min_items: int | None = None,
     ) -> None:
         super().__init__(
-            type_="array",
+            type_=type_,
             title=title,
             description=description,
             enum=enum,

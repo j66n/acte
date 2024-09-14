@@ -1,6 +1,7 @@
 from typing import Callable, Awaitable
 
 from acte.chatbot import OpenaiChatbot
+from acte.schema import IntSchema
 from acte.server import Server
 from acte.session import SessionManager
 
@@ -25,7 +26,7 @@ class MenuItem(Component):
     def view(self) -> None:
         with v.div():
             v.text(lambda: f"{self._name.value}: ${self._price.value}")
-            v.input_int("quantity", self._quantity, self._on_set)
+            v.input("quantity", self._quantity, self._on_set, schema=IntSchema())
 
     async def _on_set(self, value: str) -> None:
         await self._on_quantity_change(

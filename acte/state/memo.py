@@ -28,10 +28,6 @@ class Memo(Ref[T]):
         self._effect = Effect(_effect_func)
 
     @property
-    def is_pending(self) -> bool:
-        return self._effect.is_pending
-
-    @property
     def effect(self) -> Effect:
         return self._effect
 
@@ -40,12 +36,6 @@ class Memo(Ref[T]):
         signal = cast(Signal[T], self._signal)
 
         return signal.value
-
-    async def async_init(self) -> None:
-        if self._effect.is_pending is False:
-            raise ValueError("Memo is already async initialized")
-
-        await self._effect.async_init()
 
     def cancel(self) -> None:
         if self._effect.is_cancel is True:

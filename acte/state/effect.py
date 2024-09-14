@@ -10,54 +10,34 @@ T = TypeVar('T')
 
 
 class Effect:
-    def __init__(self, func: Callable[[], Awaitable[None] | None]) -> None:
+    def __init__(self, func: Callable[[], Awaitable[None] | None], is_async: bool = False) -> None:
+        if not is_async:
+            raise TypeError("Cannot instantiate directly. Use 'create' classmethod.")
+
         self._func = func
 
         self._signal_list: list[Signal[Any]] = []
         self._effect_children: list[Effect] = []
 
-        self._is_pending = True
         self._is_cancel = False
-
-        pending_effect_list = Context.get_pending_effect_list()
-        pending_effect_list.append(self)
 
     @classmethod
     async def create(cls, func: Callable[[], Awaitable[None] | None]) -> Effect:
-        e = Effect(func)
-        await e.async_init()
+        e = Effect(func, True)
+        await e.call()
         return e
-
-    @property
-    def is_pending(self) -> bool:
-        return self._is_pending
 
     @property
     def is_cancel(self) -> bool:
         return self._is_cancel
 
-    async def async_init(self) -> None:
-        if self._is_pending is False:
-            raise ValueError("Effect is not pending")
-
-        async_init_list = Context.get_pending_effect_list()
-        async_init_list.remove(self)
-
-        await self.call()
-
-        self._is_pending = False
-
     async def reset(self) -> None:
         if self._is_cancel is True:
             raise ValueError("Effect is canceled, cannot reset")
 
-        if self._is_pending is True:
-            raise ValueError("Effect is pending, cannot reset")
-
         self.cancel()
 
         self._is_cancel = False
-        self._is_pending = True
 
         await self.call()
 
@@ -104,5 +84,4 @@ class Effect:
             signal.remove_effect(self)
             self._signal_list.remove(signal)
 
-        self._is_pending = False
         self._is_cancel = True

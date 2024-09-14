@@ -24,7 +24,6 @@ class ComponentViewer(Base):
 
         c.view()
         await call_on_mount(c)
-        await cls._async_init(component_node)
         await cls._call_awaitable_list()
 
         cls._pop_awaitable_list()

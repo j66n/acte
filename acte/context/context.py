@@ -28,15 +28,6 @@ class Context:
             raise ValueError("context_obj is None")
 
     @classmethod
-    def get_pending_effect_list(cls) -> list[Effect]:
-        context = cls._context_obj.get()
-
-        if isinstance(context, ContextObj):
-            return context.pending_effect_list
-        else:
-            raise ValueError("context_obj is None")
-
-    @classmethod
     def get_container_stack(cls) -> list[Container]:
         context = cls._context_obj.get()
 

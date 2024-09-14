@@ -13,9 +13,6 @@ class ContextObj:
         # Used for view construction, component and dyna's view construction has two phases: sync and async
         self._awaitable_list_stack: list[list[Awaitable[None]]] = []
 
-        # collect pending effects in sync phase, then call them in async phase
-        self._pending_effect_list: list[Effect] = []
-
         # in async phase, track containers to ensure children are added to the correct container
         self._container_stack: list[Container] = []
 
@@ -37,13 +34,6 @@ class ContextObj:
 
     def set_awaitable_list_stack(self, awaitable_list_stack: list[list[Awaitable[None]]]) -> None:
         self._awaitable_list_stack = awaitable_list_stack
-
-    @property
-    def pending_effect_list(self) -> list[Effect]:
-        return self._pending_effect_list
-
-    def set_pending_effect_list(self, pending_effect_list: list[Effect]) -> None:
-        self._pending_effect_list = pending_effect_list
 
     @property
     def container_stack(self) -> list[Container]:

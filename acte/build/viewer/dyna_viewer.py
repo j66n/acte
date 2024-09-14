@@ -47,7 +47,6 @@ class DynaViewer(Base):
                     child.unmount(cached_list)
             # end: remove children and unmount non-cache children
 
-            await cls._async_init(node)
             await cls._call_awaitable_list()
 
             cls._pop_awaitable_list()

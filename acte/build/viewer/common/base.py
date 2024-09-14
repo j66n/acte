@@ -104,16 +104,6 @@ class Base:
         return str(interactive_id)
 
     @classmethod
-    async def _async_init(cls, node: Node) -> None:
-        pending_effect_list = Context.get_pending_effect_list()
-
-        for e in pending_effect_list:  # just add top level effect, not children
-            node.add_effect(e)
-
-        for e in pending_effect_list:
-            await e.async_init()
-
-    @classmethod
     def _set_skip(cls) -> None:
         Context.set_is_skip(True)
 

@@ -5,93 +5,18 @@ from acte.build.viewer.common.base import Base
 
 from acte.node import Input
 from acte.schema.schema import Schema
-from acte.schema.simple_schema.bool_schema import BoolSchema
-from acte.schema.simple_schema.int_schema import IntSchema
-from acte.schema.simple_schema.num_schema import NumSchema
 from acte.schema.simple_schema.str_schema import StrSchema
 from acte.state import Signal, Compute
 
 
 class InputViewer(Base):
     @classmethod
-    def input_str(
+    def input(
             cls,
             name: Callable[[], str] | Prop[str] = '',
-            value: Prop[str] | None = None,
+            value: Prop[Any] | None = None,
             on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
             schema: Prop[Schema] | None = None,
-    ) -> None:
-        if schema is None:
-            schema = StrSchema()
-
-        cls._input(
-            name,
-            value,
-            on_set,
-            schema,
-        )
-
-    @classmethod
-    def input_int(
-            cls,
-            name: Callable[[], str] | Prop[str] = '',
-            value: Prop[int] | None = None,
-            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[Schema] | None = None,
-    ) -> None:
-        if schema is None:
-            schema = IntSchema()
-
-        cls._input(
-            name,
-            value,
-            on_set,
-            schema,
-        )
-
-    @classmethod
-    def input_float(
-            cls,
-            name: Callable[[], str] | Prop[str] = '',
-            value: Signal[float] | None = None,
-            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[Schema] | None = None,
-    ) -> None:
-        if schema is None:
-            schema = NumSchema()
-
-        cls._input(
-            name,
-            value,
-            on_set,
-            schema,
-        )
-
-    @classmethod
-    def input_bool(
-            cls,
-            name: Callable[[], str] | Prop[str] = '',
-            value: Signal[bool] | None = None,
-            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None = None,
-            schema: Prop[Schema] | None = None,
-    ) -> None:
-        if schema is None:
-            schema = BoolSchema()
-
-        cls._input(
-            name,
-            value,
-            on_set,
-            schema,
-        )
-
-    @classmethod
-    def _input(
-            cls,
-            name: Callable[[], str] | Prop[str],
-            value: Prop[Any] | None,
-            on_set: Prop[Callable[[Any], Awaitable[None] | None]] | None,
-            schema: Prop[Schema],
     ) -> None:
         cls._check_skip()
 
@@ -106,6 +31,9 @@ class InputViewer(Base):
 
             async def on_set(v: Any) -> None:
                 await value.set(v)
+
+        if schema is None:
+            schema = StrSchema()
 
         cls._append_awaitable(
             cls._input_constructor(

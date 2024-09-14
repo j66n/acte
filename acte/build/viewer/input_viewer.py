@@ -32,7 +32,7 @@ class InputViewer(Base):
                 await value.set(v)
 
         if schema is None:
-            schema = StrSchema()
+            schema = Schema()
 
         cls._append_awaitable(
             cls._input_constructor(

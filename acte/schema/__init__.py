@@ -1,18 +1,15 @@
 from acte.schema.schema import Schema
+from acte.schema.arr_schema import ArrSchema
+from acte.schema.bool_schema import BoolSchema
+from acte.schema.int_schema import IntSchema
+from acte.schema.null_schema import NullSchema
+from acte.schema.num_schema import NumSchema
+from acte.schema.str_schema import StrSchema
 
-from acte.schema.simple_schema.base_schema import BaseSchema
-
-from acte.schema.simple_schema.bool_schema import BoolSchema
-from acte.schema.simple_schema.int_schema import IntSchema
-from acte.schema.simple_schema.num_schema import NumSchema
-from acte.schema.simple_schema.str_schema import StrSchema
-from acte.schema.simple_schema.obj_schema import ObjSchema
-from acte.schema.simple_schema.arr_schema import ArrSchema
-from acte.schema.simple_schema.null_schema import NullSchema
+from acte.schema.obj_schema import ObjSchema
 
 __all__ = [
     'Schema',
-    'BaseSchema',
 
     'BoolSchema',
     'IntSchema',

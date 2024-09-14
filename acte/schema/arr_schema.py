@@ -2,11 +2,10 @@ from typing import Any
 
 import jsonschema  # type: ignore
 
-from acte.schema.simple_schema.base_schema import BaseSchema
 from acte.schema.schema import Schema
 
 
-class ArrSchema(BaseSchema):
+class ArrSchema(Schema):
     def __init__(
             self,
             type_: str | None = "array",

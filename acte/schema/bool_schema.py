@@ -3,16 +3,15 @@ from typing import Any
 import jsonschema  # type: ignore
 
 from acte.schema import Schema
-from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class NullSchema(BaseSchema):
+class BoolSchema(Schema):
     def __init__(
             self,
-            type_: str | None = 'null',
+            type_: str | None = 'boolean',
             title: str | None = None,
             description: str | None = None,
-            enum: list[dict[str, Any]] | None = None,
+            enum: list[bool] | None = None,
             const: Any | None = None,
             all_of: list[Schema] | None = None,
             one_of: list[Schema] | None = None,
@@ -42,6 +41,6 @@ class NullSchema(BaseSchema):
         schema = super().json_schema
         return schema
 
-    def resolve(self, data: Any) -> None:
+    def resolve(self, data: Any) -> bool:
         jsonschema.validate(data, self.json_schema)
-        return None
+        return bool(data)

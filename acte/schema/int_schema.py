@@ -3,16 +3,15 @@ from typing import Any
 import jsonschema  # type: ignore
 
 from acte.schema import Schema
-from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class StrSchema(BaseSchema):
+class IntSchema(Schema):
     def __init__(
             self,
-            type_: str | None = 'string',
+            type_: str | None = 'integer',
             title: str | None = None,
             description: str | None = None,
-            enum: list[str] | None = None,
+            enum: list[int] | None = None,
             const: Any | None = None,
             all_of: list[Schema] | None = None,
             one_of: list[Schema] | None = None,
@@ -22,8 +21,8 @@ class StrSchema(BaseSchema):
             then: Schema | None = None,
             else_: Schema | None = None,
 
-            min_length: int | None = None,
-            max_length: int | None = None,
+            minimum: int | None = None,
+            maximum: int | None = None,
     ) -> None:
         super().__init__(
             type_=type_,
@@ -40,21 +39,29 @@ class StrSchema(BaseSchema):
             else_=else_,
         )
 
-        self.min_length = min_length
-        self.max_length = max_length
+        self._minimum = minimum
+        self._maximum = maximum
+
+    @property
+    def minimum(self) -> int | None:
+        return self._minimum
+
+    @property
+    def maximum(self) -> int | None:
+        return self._maximum
 
     @property
     def json_schema(self) -> dict[str, Any]:
         schema = super().json_schema
 
-        if self.min_length is not None:
-            schema["minLength"] = self.min_length
+        if self.minimum is not None:
+            schema["minimum"] = self.minimum
 
-        if self.max_length is not None:
-            schema["maxLength"] = self.max_length
+        if self.maximum is not None:
+            schema["maximum"] = self.maximum
 
         return schema
 
-    def resolve(self, data: Any) -> str:
+    def resolve(self, data: Any) -> int:
         jsonschema.validate(data, self.json_schema)
-        return str(data)
+        return int(data)

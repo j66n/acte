@@ -3,16 +3,15 @@ from typing import Any
 import jsonschema  # type: ignore
 
 from acte.schema import Schema
-from acte.schema.simple_schema.base_schema import BaseSchema
 
 
-class NumSchema(BaseSchema):
+class StrSchema(Schema):
     def __init__(
             self,
-            type_: str | None = 'number',
+            type_: str | None = 'string',
             title: str | None = None,
             description: str | None = None,
-            enum: list[None] | None = None,
+            enum: list[str] | None = None,
             const: Any | None = None,
             all_of: list[Schema] | None = None,
             one_of: list[Schema] | None = None,
@@ -22,8 +21,8 @@ class NumSchema(BaseSchema):
             then: Schema | None = None,
             else_: Schema | None = None,
 
-            minimum: float | None = None,
-            maximum: float | None = None,
+            min_length: int | None = None,
+            max_length: int | None = None,
     ) -> None:
         super().__init__(
             type_=type_,
@@ -40,29 +39,21 @@ class NumSchema(BaseSchema):
             else_=else_,
         )
 
-        self._minimum = minimum
-        self._maximum = maximum
-
-    @property
-    def minimum(self) -> float | None:
-        return self._minimum
-
-    @property
-    def maximum(self) -> float | None:
-        return self._maximum
+        self.min_length = min_length
+        self.max_length = max_length
 
     @property
     def json_schema(self) -> dict[str, Any]:
         schema = super().json_schema
 
-        if self._minimum is not None:
-            schema['minimum'] = self._minimum
+        if self.min_length is not None:
+            schema["minLength"] = self.min_length
 
-        if self._maximum is not None:
-            schema['maximum'] = self._maximum
+        if self.max_length is not None:
+            schema["maxLength"] = self.max_length
 
         return schema
 
-    def resolve(self, data: Any) -> float:
+    def resolve(self, data: Any) -> str:
         jsonschema.validate(data, self.json_schema)
-        return float(data)
+        return str(data)

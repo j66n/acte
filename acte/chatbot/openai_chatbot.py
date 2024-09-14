@@ -1,5 +1,4 @@
 import json
-
 import aiohttp
 from typing import Any, AsyncGenerator
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TypeVar, TYPE_CHECKING
 
-from acte.context.context import Context
+from acte.context import Context
 from acte.state.ref import Ref
 
 if TYPE_CHECKING:

@@ -8,7 +8,7 @@ from acte.context.context_obj import ContextObj
 if TYPE_CHECKING:
     from acte.node import Cache
     from acte.node.implement import Container
-    from acte.state.effect import Effect
+    from acte.state import Effect
 
 
 class Context:

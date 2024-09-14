@@ -1,5 +1,3 @@
-import json
-
 from acte.build import call_on_display
 from acte.common.util import call_mix
 from acte.executor.action_type import ActionType

@@ -4,7 +4,7 @@ import inspect
 from typing import Callable, Awaitable, TypeVar, Any
 
 from acte.state.signal import Signal
-from acte.context.context import Context
+from acte.context import Context
 
 T = TypeVar('T')
 

@@ -1,11 +1,10 @@
-from typing import Callable, Awaitable, cast
+from typing import Callable, Awaitable
+
+from acte.node import Button
+from acte.state import Compute
 
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
-
-from acte.node import Button
-from acte.schema.simple_schema.null_schema import NullSchema
-from acte.state import Compute, Ref, Signal, Effect
 
 
 class ButtonViewer(Base):

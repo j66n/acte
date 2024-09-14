@@ -1,8 +1,9 @@
 import contextlib
 from typing import Iterator
 
-from acte.build.viewer.common.base import Base
 from acte.node import Div
+
+from acte.build.viewer.common.base import Base
 
 
 class DivViewer(Base):

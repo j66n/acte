@@ -1,9 +1,10 @@
 from collections.abc import Callable
 
+from acte.node import Text
+from acte.state import Compute
+
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
-from acte.node import Text
-from acte.state import Compute, Ref
 
 
 class TextViewer(Base):

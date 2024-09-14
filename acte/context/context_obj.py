@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Awaitable, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from acte.node.implement.container import Container
-    from acte.node.virtual.cache import Cache
-    from acte.state.effect import Effect
+    from acte.node.implement import Container
+    from acte.node import Cache
+    from acte.state import Effect
 
 
 class ContextObj:

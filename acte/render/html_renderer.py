@@ -3,7 +3,7 @@ import xml.etree.ElementTree as Et
 
 from acte.node import Node, Block, Virtual, Inline, Div, Text, ComponentNode, Root, Button, Dyna, Cache, Input
 from acte.node.implement import Container
-from acte.render.renderer import Renderer
+from acte.render import Renderer
 
 
 class HtmlRenderer(Renderer):

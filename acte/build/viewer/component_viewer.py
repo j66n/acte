@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from acte.node import ComponentNode
+
 from acte.build.component import Component, call_on_mount
 from acte.build.viewer.common.base import Base
-
-from acte.node import ComponentNode
 
 
 class ComponentViewer(Base):

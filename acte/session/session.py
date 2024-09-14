@@ -4,7 +4,7 @@ from acte.build import Component, Builder
 from acte.executor import Executor, ActionType
 from acte.node import Root, Node
 from acte.render import Renderer
-from acte.context.context import Context, ContextObj
+from acte.context import Context, ContextObj
 
 T = TypeVar('T')
 

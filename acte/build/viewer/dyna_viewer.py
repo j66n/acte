@@ -1,7 +1,8 @@
 from typing import Callable
 
-from acte.build.viewer.common.base import Base
 from acte.node import Dyna
+
+from acte.build.viewer.common.base import Base
 
 
 class DynaViewer(Base):

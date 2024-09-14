@@ -1,9 +1,10 @@
-from typing import Callable, Awaitable, TypeVar, Generic, Type, TypeAlias, Any
+from typing import Callable, Awaitable, Any
+
+from acte.schema import Schema
+from acte.state import Ref, Effect
 
 from acte.node.element.inline.inline import Inline
 from acte.node.implement.interactive import Interactive
-from acte.schema.schema import Schema
-from acte.state import Ref, Effect, Signal
 
 
 class Input(Inline, Interactive):

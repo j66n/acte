@@ -1,8 +1,9 @@
 from typing import Callable, Awaitable
 
+from acte.state import Effect, Ref
+
 from acte.node.element.inline.inline import Inline
 from acte.node.implement.interactive import Interactive
-from acte.state import Effect, Ref
 
 
 class Button(Inline, Interactive):

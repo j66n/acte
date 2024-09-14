@@ -1,12 +1,11 @@
 from typing import Callable, Awaitable, cast, Any
 
+from acte.node import Input
+from acte.schema import Schema, StrSchema
+from acte.state import Signal, Compute
+
 from acte.build.type import Prop, to_ref
 from acte.build.viewer.common.base import Base
-
-from acte.node import Input
-from acte.schema.schema import Schema
-from acte.schema.simple_schema.str_schema import StrSchema
-from acte.state import Signal, Compute
 
 
 class InputViewer(Base):

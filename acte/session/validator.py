@@ -1,6 +1,6 @@
 from typing import Any
 
-from acte.session import Session
+from acte.session.session import Session
 
 
 class Validator:

@@ -2,8 +2,8 @@ import inspect
 from typing import Callable, TypeVar, cast, Awaitable
 
 from acte.state.effect import Effect
-from acte.state.signal import Signal
 from acte.state.ref import Ref
+from acte.state.signal import Signal
 
 T = TypeVar('T')
 

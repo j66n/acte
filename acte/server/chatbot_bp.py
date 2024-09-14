@@ -1,5 +1,4 @@
 import os
-import typing
 from json import JSONDecodeError
 
 from starlette.applications import Starlette

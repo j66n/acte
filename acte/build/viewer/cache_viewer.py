@@ -3,10 +3,10 @@ from __future__ import annotations
 import contextlib
 from typing import Any, Iterator, cast, Container
 
+from acte.node import Cache
+
 from acte.build.viewer.common.exception import SkipException
 from acte.build.viewer.common.base import Base
-
-from acte.node import Cache
 
 
 class CacheViewer(Base):

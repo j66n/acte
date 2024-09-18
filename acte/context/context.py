@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from contextvars import ContextVar
+from contextvars import ContextVar, Token
 from typing import TYPE_CHECKING, Any, Awaitable
 
 from acte.context.context_obj import ContextObj
@@ -15,8 +15,13 @@ class Context:
     _context_obj: ContextVar[ContextObj | None] = ContextVar("context_obj", default=None)
 
     @classmethod
-    def use(cls, c: ContextObj) -> None:
-        cls._context_obj.set(c)
+    def use(cls, c: ContextObj) -> Token:
+        token = cls._context_obj.set(c)
+        return token
+
+    @classmethod
+    def reset(cls, token: Token) -> None:
+        cls._context_obj.reset(token)
 
     @classmethod
     def get_awaitable_list_stack(cls) -> list[list[Awaitable[None]]]:

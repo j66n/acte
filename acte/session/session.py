@@ -26,17 +26,23 @@ class Session:
         self._root: Root | None = None
 
     async def start(self) -> None:
-        Context.use(self._context)
+        token = Context.use(self._context)
 
-        self._root = await self._builder.build(self._entry_class)
+        try:
+            self._root = await self._builder.build(self._entry_class)
+        finally:
+            Context.reset(token)
 
     async def execute(self, target_id: str, action_type: ActionType, value: str | None = None) -> None:
-        Context.use(self._context)
+        token = Context.use(self._context)
 
-        if not isinstance(self._root, Root):
-            raise RuntimeError("session hasn't started, and root is None.")
+        try:
+            if not isinstance(self._root, Root):
+                raise RuntimeError("session hasn't started, and root is None.")
 
-        await self._executor.execute(self._root, target_id, action_type, value)
+            await self._executor.execute(self._root, target_id, action_type, value)
+        finally:
+            Context.reset(token)
 
     async def display(self) -> None:
         if not isinstance(self._root, Node):

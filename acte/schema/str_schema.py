@@ -23,6 +23,8 @@ class StrSchema(Schema):
 
             min_length: int | None = None,
             max_length: int | None = None,
+            pattern: str | None = None,
+            format_: str | None = None,
     ) -> None:
         super().__init__(
             type_=type_,
@@ -39,18 +41,42 @@ class StrSchema(Schema):
             else_=else_,
         )
 
-        self.min_length = min_length
-        self.max_length = max_length
+        self._min_length = min_length
+        self._max_length = max_length
+        self._pattern = pattern
+        self._format = format_
+
+    @property
+    def min_length(self) -> int | None:
+        return self._min_length
+
+    @property
+    def max_length(self) -> int | None:
+        return self._max_length
+
+    @property
+    def pattern(self) -> str | None:
+        return self._pattern
+
+    @property
+    def format_(self) -> str | None:
+        return self._format
 
     @property
     def json_schema(self) -> dict[str, Any]:
         schema = super().json_schema
 
-        if self.min_length is not None:
-            schema["minLength"] = self.min_length
+        if self._min_length is not None:
+            schema["minLength"] = self._min_length
 
-        if self.max_length is not None:
-            schema["maxLength"] = self.max_length
+        if self._max_length is not None:
+            schema["maxLength"] = self._max_length
+
+        if self._pattern is not None:
+            schema["pattern"] = self._pattern
+
+        if self._format is not None:
+            schema["format"] = self._format
 
         return schema
 
